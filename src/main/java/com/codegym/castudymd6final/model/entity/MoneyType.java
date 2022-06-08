@@ -1,9 +1,12 @@
 package com.codegym.castudymd6final.model.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "money_type")
+@Data
 public class MoneyType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,19 +26,4 @@ public class MoneyType {
         this.name = name;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
