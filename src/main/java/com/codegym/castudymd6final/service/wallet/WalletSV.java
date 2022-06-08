@@ -32,4 +32,9 @@ public class WalletSV implements IWalletSV{
     public Optional<Wallet> findById(Long id) {
         return walletRepo.findById(id);
     }
+
+    @Override
+    public List<Wallet> getWalletByUserId(Long userId) {
+        return walletRepo.getWalletByUserId(userId);
+    }
 }
