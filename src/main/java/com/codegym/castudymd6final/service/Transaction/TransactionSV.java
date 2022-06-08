@@ -1,28 +1,34 @@
 package com.codegym.castudymd6final.service.Transaction;
 
+import com.codegym.castudymd6final.model.entity.Transaction;
+import com.codegym.castudymd6final.repository.ITransactionRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 @Service
 public class TransactionSV implements ITransactionSV{
+    @Autowired
+    private ITransactionRepo transactionRepo;
     @Override
-    public List findAll() {
-        return null;
+    public List<Transaction> findAll() {
+        return transactionRepo.findAll();
     }
 
     @Override
-    public Object save(Object o) {
-        return null;
+    public Transaction save(Transaction transaction) {
+        return transactionRepo.save(transaction);
     }
 
     @Override
     public void removeById(Long id) {
+        transactionRepo.deleteById(id);
 
     }
 
     @Override
-    public Optional findById(Long id) {
-        return Optional.empty();
+    public Optional<Transaction> findById(Long id) {
+        return transactionRepo.findById(id);
     }
 }
