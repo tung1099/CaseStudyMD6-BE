@@ -1,18 +1,21 @@
 package com.codegym.castudymd6final.model.entity;
 
+import lombok.Data;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
+@Data
 public class AddMoney {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private int money;
 
-    private String description;
+    private Date date;
 
     @ManyToOne
     private Wallet wallet;
@@ -20,48 +23,16 @@ public class AddMoney {
     public AddMoney() {
     }
 
-    public AddMoney(String name, String description, Wallet wallet) {
-        this.name = name;
-        this.description = description;
+    public AddMoney(Long id, int money, Date date, Wallet wallet) {
+        this.id = id;
+        this.money = money;
+        this.date = date;
         this.wallet = wallet;
     }
 
-    public AddMoney(Long id, String name, String description, Wallet wallet) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.wallet = wallet;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Wallet getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(Wallet wallet) {
+    public AddMoney(int money, Date date, Wallet wallet) {
+        this.money = money;
+        this.date = date;
         this.wallet = wallet;
     }
 }
