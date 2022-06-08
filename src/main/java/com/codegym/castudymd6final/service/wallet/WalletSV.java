@@ -1,28 +1,35 @@
 package com.codegym.castudymd6final.service.wallet;
 
+import com.codegym.castudymd6final.model.entity.Wallet;
+import com.codegym.castudymd6final.repository.IWalletRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 @Service
 public class WalletSV implements IWalletSV{
+    @Autowired
+    private IWalletRepo walletRepo;
+
     @Override
-    public List findAll() {
-        return null;
+    public List<Wallet> findAll() {
+        return walletRepo.findAll();
     }
 
     @Override
-    public Object save(Object o) {
-        return null;
+    public Wallet save(Wallet wallet) {
+        return walletRepo.save(wallet);
     }
 
     @Override
     public void removeById(Long id) {
+        walletRepo.deleteById(id);
 
     }
 
     @Override
-    public Optional findById(Long id) {
-        return Optional.empty();
+    public Optional<Wallet> findById(Long id) {
+        return walletRepo.findById(id);
     }
 }

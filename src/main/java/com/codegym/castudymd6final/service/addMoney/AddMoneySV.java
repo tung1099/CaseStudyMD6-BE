@@ -1,28 +1,33 @@
 package com.codegym.castudymd6final.service.addMoney;
 
+import com.codegym.castudymd6final.model.entity.AddMoney;
+import com.codegym.castudymd6final.repository.IAddMoneyRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 @Service
 public class AddMoneySV implements IAddMoneySV {
+    @Autowired
+    private IAddMoneyRepo addMoneyRepo;
     @Override
-    public List findAll() {
-        return null;
+    public List<AddMoney> findAll() {
+        return addMoneyRepo.findAll() ;
     }
 
     @Override
-    public Object save(Object o) {
-        return null;
+    public AddMoney save(AddMoney addMoney) {
+        return addMoneyRepo.save(addMoney);
     }
 
     @Override
     public void removeById(Long id) {
-
+        addMoneyRepo.deleteById(id);
     }
 
     @Override
-    public Optional findById(Long id) {
-        return Optional.empty();
+    public Optional<AddMoney> findById(Long id) {
+        return addMoneyRepo.findById(id);
     }
 }
