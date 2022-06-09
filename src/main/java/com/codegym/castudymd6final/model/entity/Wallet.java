@@ -3,6 +3,7 @@ package com.codegym.castudymd6final.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -34,13 +35,25 @@ public class Wallet {
     public Wallet() {
     }
 
-    public Wallet(String icon, String name, int total, Date date, String note, MoneyType moneyType) {
+    public Wallet(Long id, String icon, String name, int total, Date date, String note, MoneyType moneyType, User user) {
+        this.id = id;
         this.icon = icon;
         this.name = name;
         this.total = total;
         this.date = date;
         this.note = note;
         this.moneyType = moneyType;
+        this.user = user;
+    }
+
+    public Wallet(String icon, String name, int total, Date date, String note, MoneyType moneyType, User user) {
+        this.icon = icon;
+        this.name = name;
+        this.total = total;
+        this.date = date;
+        this.note = note;
+        this.moneyType = moneyType;
+        this.user = user;
     }
 
     public Wallet(Long id, String icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
@@ -55,7 +68,7 @@ public class Wallet {
         this.user = user;
     }
 
-    public Wallet(String icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
+    public Wallet(String icon, String name, int total, MoneyType moneyType, int balance, Date date, String note, User user) {
         this.icon = icon;
         this.name = name;
         this.total = total;

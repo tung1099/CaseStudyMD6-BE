@@ -13,7 +13,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String amount;
+    private int amount;
 
     private String note;
 
@@ -28,7 +28,7 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String amount, String note, Date date, Category category, Wallet wallet) {
+    public Transaction(int amount, String note, Date date, Category category, Wallet wallet) {
         this.amount = amount;
         this.note = note;
         this.date = date;
@@ -36,7 +36,7 @@ public class Transaction {
         this.wallet = wallet;
     }
 
-    public Transaction(Long id, String amount, String note, Date date, Category category, Wallet wallet) {
+    public Transaction(Long id, int amount, String note, Date date, Category category, Wallet wallet) {
         this.id = id;
         this.amount = amount;
         this.note = note;

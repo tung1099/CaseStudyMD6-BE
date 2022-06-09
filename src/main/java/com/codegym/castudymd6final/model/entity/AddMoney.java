@@ -1,6 +1,6 @@
 package com.codegym.castudymd6final.model.entity;
 
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 
 import javax.persistence.*;
 
