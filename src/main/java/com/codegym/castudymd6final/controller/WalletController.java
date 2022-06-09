@@ -54,7 +54,7 @@ public class WalletController {
         return new ResponseEntity<>(moneyTypes, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<Wallet>> findAll(){
         List<Wallet> wallets = walletSV.findAll();
         return new ResponseEntity<>(wallets, HttpStatus.OK);

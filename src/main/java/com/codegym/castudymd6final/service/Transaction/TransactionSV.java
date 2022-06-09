@@ -1,6 +1,8 @@
 package com.codegym.castudymd6final.service.Transaction;
 
 import com.codegym.castudymd6final.model.entity.Transaction;
+import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
+import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
 import com.codegym.castudymd6final.repository.ITransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,4 +33,21 @@ public class TransactionSV implements ITransactionSV{
     public Optional<Transaction> findById(Long id) {
         return transactionRepo.findById(id);
     }
+
+    @Override
+    public Iterable<TransactionInDay> getTransactionInDay() {
+        return transactionRepo.getTransactionInDay();
+    }
+
+    @Override
+    public Iterable<TransactionInDay> getTransactionInDayByIdWallet(Long id) {
+        return transactionRepo.getTransactionInDayByIdWallet(id);
+    }
+
+    @Override
+    public Iterable<SumInDay> getSumInDay(Long id) {
+        return transactionRepo.getSumInDay(id);
+    }
+
+
 }
