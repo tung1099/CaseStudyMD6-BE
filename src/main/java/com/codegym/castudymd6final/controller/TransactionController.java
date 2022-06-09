@@ -61,7 +61,7 @@ public class TransactionController {
         Wallet wallet =  walletService.findById(id1).get();
         int walletMoney = wallet.getBalance();
         int money = transaction.getAmount();
-        wallet.setTotal(walletMoney + money);
+        wallet.setBalance(walletMoney + money);
         transactionService.removeById(id);
         return new ResponseEntity<>(optionalTransaction.get(), HttpStatus.NO_CONTENT);
     }
