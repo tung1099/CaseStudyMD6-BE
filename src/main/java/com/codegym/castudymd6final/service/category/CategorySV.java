@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Optional;
 @Service
 public class CategorySV implements ICategorySV{
+
     @Autowired
     private ICategoryRepo categoryRepo;
+
     @Override
     public List<Category> findAll() {
         return categoryRepo.findAll();
@@ -24,7 +26,6 @@ public class CategorySV implements ICategorySV{
     @Override
     public void removeById(Long id) {
         categoryRepo.deleteById(id);
-
     }
 
     @Override

@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
 
 public class WalletForm {
-    private long id;
+    private Long id;
 
     private MultipartFile icon;
 
@@ -28,28 +28,18 @@ public class WalletForm {
 
     public WalletForm() {
     }
-
-    public WalletForm(MultipartFile icon, String name, int total, Date date, String note, MoneyType moneyType) {
-        this.icon = icon;
-        this.name = name;
-        this.total = total;
-        this.date = date;
-        this.note = note;
-        this.moneyType = moneyType;
-    }
-
-    public WalletForm(MultipartFile icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
+    public WalletForm(MultipartFile icon, String name, int total , MoneyType moneyType, int balance, String note, User user) {
         this.icon = icon;
         this.name = name;
         this.total = total;
         this.balance = balance;
-        this.date = date;
         this.note = note;
         this.moneyType = moneyType;
         this.user = user;
     }
 
-    public WalletForm(long id, MultipartFile icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
+
+    public WalletForm(Long id, MultipartFile icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
         this.id = id;
         this.icon = icon;
         this.name = name;
@@ -61,11 +51,11 @@ public class WalletForm {
         this.user = user;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
