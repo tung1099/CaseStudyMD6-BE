@@ -1,20 +1,16 @@
-package com.codegym.castudymd6final.model.entity;
+package com.codegym.castudymd6final.model.dto;
 
-import lombok.Data;
 
-import javax.persistence.*;
-import java.util.Calendar;
+import com.codegym.castudymd6final.model.entity.MoneyType;
+import com.codegym.castudymd6final.model.entity.User;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
 
-@Entity
-@Table(name = "wallets")
-@Data
-public class Wallet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class WalletForm {
     private Long id;
 
-    private String icon;
+    private MultipartFile icon;
 
     private String name;
 
@@ -26,49 +22,25 @@ public class Wallet {
 
     private String note;
 
-    @ManyToOne
     private MoneyType moneyType;
 
-    @ManyToOne
     private User user;
 
-    public Wallet() {
+    public WalletForm() {
     }
-
-    public Wallet(Long id, String icon, String name, int total, Date date, String note, MoneyType moneyType, User user) {
-        this.id = id;
-        this.icon = icon;
-        this.name = name;
-        this.total = total;
-        this.date = date;
-        this.note = note;
-        this.moneyType = moneyType;
-        this.user = user;
-    }
-
-    public Wallet(String icon, String name, int total, Date date, String note, MoneyType moneyType, User user) {
-        this.icon = icon;
-        this.name = name;
-        this.total = total;
-        this.date = date;
-        this.note = note;
-        this.moneyType = moneyType;
-        this.user = user;
-    }
-
-    public Wallet(Long id, String icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
-        this.id = id;
+    public WalletForm(MultipartFile icon, String name, int total , MoneyType moneyType, int balance, String note, User user) {
         this.icon = icon;
         this.name = name;
         this.total = total;
         this.balance = balance;
-        this.date = date;
         this.note = note;
         this.moneyType = moneyType;
         this.user = user;
     }
 
-    public Wallet(String icon, String name, int total, MoneyType moneyType, int balance, Date date, String note, User user) {
+
+    public WalletForm(Long id, MultipartFile icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
+        this.id = id;
         this.icon = icon;
         this.name = name;
         this.total = total;
@@ -87,11 +59,11 @@ public class Wallet {
         this.id = id;
     }
 
-    public String getIcon() {
+    public MultipartFile getIcon() {
         return icon;
     }
 
-    public void setIcon(String icon) {
+    public void setIcon(MultipartFile icon) {
         this.icon = icon;
     }
 

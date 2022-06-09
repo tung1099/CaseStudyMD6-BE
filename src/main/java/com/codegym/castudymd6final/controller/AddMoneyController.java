@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,8 @@ public class AddMoneyController {
         int money = addMoney.getMoney();
         wallet.setTotal(walletMoney + money);
         wallet.setBalance(balanceMoney + money);
-        return new ResponseEntity<>(addMoneyService.save(addMoney), HttpStatus.CREATED);
+        AddMoney addMoney1 = new AddMoney(money, new Date(), wallet);
+        return new ResponseEntity<>(addMoneyService.save(addMoney1), HttpStatus.CREATED);
     }
 }
 
