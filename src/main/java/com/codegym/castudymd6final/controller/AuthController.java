@@ -1,9 +1,12 @@
 package com.codegym.castudymd6final.controller;
+import com.codegym.castudymd6final.model.dto.ChangePassword;
 import com.codegym.castudymd6final.model.dto.JwtResponse;
 import com.codegym.castudymd6final.model.dto.SignUpForm;
 import com.codegym.castudymd6final.model.entity.User;
+import com.codegym.castudymd6final.model.entity.UserInfo;
 import com.codegym.castudymd6final.service.JwtService;
 import com.codegym.castudymd6final.service.user.IUserService;
+import com.codegym.castudymd6final.service.userInfo.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +15,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -27,6 +32,12 @@ public class AuthController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private UserInfoService userInfoService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
@@ -43,20 +54,47 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody SignUpForm user) {
-        if (!user.getPasswordForm().getPassword().equals(user.getPasswordForm().getConfirmPassword())) {
+    public ResponseEntity<User> register( @RequestBody SignUpForm user) {
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        User user1 = new User(user.getUsername(), user.getPasswordForm().getPassword());
-        return new ResponseEntity<>(userService.save(user1), HttpStatus.CREATED);
+        String avatar = "avatar.jpg";
+        User user1 = new User(user.getUsername(), user.getPassword());
+        userService.save(user1);
+        UserInfo userInfo = new UserInfo(
+                user.getName(),
+                avatar,
+                user.getAddress(),
+                user.getPhoneNumber(),
+                user.getBirthDay(),
+                user1
+        );
+        userInfoService.save(userInfo);
+        return new ResponseEntity<>( HttpStatus.CREATED);
     }
 
-    @PostMapping("/password/{userId}")
-    public ResponseEntity<User> editpass(@RequestBody SignUpForm user, @PathVariable Long userId) {
-        User u = userService.findById(userId).get();
-        if (!user.getPasswordForm().getPassword().equals(user.getPasswordForm().getConfirmPassword())) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @PostMapping("/changePassword/{id}")
+    public ResponseEntity<User> changePassword(@PathVariable Long id, @RequestBody ChangePassword changePassword) {
+        Optional<User> user = this.userService.findById(id);
+        String newPassword;
+        String oldPassword = changePassword.getOldPassword();
+        if (!user.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            if (passwordEncoder.matches(oldPassword, user.get().getPassword())) {
+                if (changePassword.getNewPassword().equals(changePassword.getConfirmNewPassword())) {
+                    newPassword = changePassword.getNewPassword();
+                } else {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
-        User user1 = new User(userId, u.getUsername(), user.getPasswordForm().getPassword());
-        return new ResponseEntity<>(userService.save(user1), HttpStatus.CREATED);    }
+        user.get().setPassword(newPassword);
+        user.get().setId(id);
+        this.userService.save(user.get());
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
+
+    }
 }

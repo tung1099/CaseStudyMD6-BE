@@ -3,6 +3,7 @@ package com.codegym.castudymd6final.controller;
 import com.codegym.castudymd6final.model.entity.Category;
 import com.codegym.castudymd6final.model.entity.Transaction;
 import com.codegym.castudymd6final.model.entity.Wallet;
+import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
 import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
 import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
 import com.codegym.castudymd6final.service.Transaction.ITransactionSV;
@@ -14,6 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +30,20 @@ public class TransactionController {
     @Autowired
     private ITransactionSV transactionService;
 
+
+
+
     @PostMapping("/create")
-    public ResponseEntity<Transaction> saveTransaction(@RequestBody Transaction transaction){
+    public ResponseEntity<Transaction> saveTransaction(@RequestBody Transaction transaction) throws ParseException {
         Long id = transaction.getWallet().getId();
         Wallet wallet =  walletService.findById(id).get();
         int walletMoney = wallet.getBalance();
         int money = transaction.getAmount();
         wallet.setBalance(walletMoney - money);
+//        DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+//        Date date = new Date(String.valueOf(transaction.getDate()));
+//        Date todayWithZeroTime = formatter.parse(formatter.format(date));
+//        Transaction transaction1 = new Transaction(transaction.getAmount(), transaction.getNote(), date, transaction.getCategory(), transaction.getWallet());
         return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.CREATED);
     }
 
@@ -81,6 +93,12 @@ public class TransactionController {
     @GetMapping("/transactionInDayByIdWallet/{id}")
     public ResponseEntity<Iterable<TransactionInDay>> getTransactionInDayByIdWallet (@PathVariable Long id){
         Iterable<TransactionInDay> transactionInDays = transactionService.getTransactionInDayByIdWallet(id);
+        return new ResponseEntity<>(transactionInDays, HttpStatus.OK);
+    }
+
+    @GetMapping("/allTransactionByIdWallet/{id}")
+    public ResponseEntity<Iterable<AllTransactionWallet>> getAllTransactionByIdWallet (@PathVariable Long id){
+        Iterable<AllTransactionWallet> transactionInDays = transactionService.getAllTransactionByIdWallet(id);
         return new ResponseEntity<>(transactionInDays, HttpStatus.OK);
     }
 

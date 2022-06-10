@@ -16,7 +16,7 @@ import java.util.List;
 @Controller
 @RequestMapping("categories")
 @CrossOrigin("*")
-public class CategoryController {
+public class    CategoryController {
     @Autowired
     private ICategorySV categoryService;
 

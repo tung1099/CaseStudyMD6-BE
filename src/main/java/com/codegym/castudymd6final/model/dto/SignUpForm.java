@@ -10,5 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignUpForm {
     private String username;
-    private PasswordForm passwordForm;
+
+    private String password;
+
+    private String confirmPassword;
+
+    private String name;
+
+    private String phoneNumber;
+
+    private String birthDay;
+
+    private String address;
 }

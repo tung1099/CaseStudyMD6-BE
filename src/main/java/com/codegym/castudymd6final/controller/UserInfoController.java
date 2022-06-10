@@ -24,13 +24,6 @@ public class UserInfoController {
     @Value("${file-upload}")
     private String uploadPath;
 
-    @PostMapping("/create")
-    public ResponseEntity<UserInfo> createNewUserInfo(@ModelAttribute UserInfo userInfo) {
-        userInfo.setAvatar("avatar.jpg");
-        userInfoService.save(userInfo);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PutMapping("/avatar/{id}")
     public ResponseEntity<UserInfo> editAvatar(@PathVariable Long id, @ModelAttribute AvatarForm avatarForm) {
         MultipartFile multipartFile = avatarForm.getAvatar();
