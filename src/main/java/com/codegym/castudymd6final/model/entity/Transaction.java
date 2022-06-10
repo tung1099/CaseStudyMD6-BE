@@ -25,24 +25,37 @@ public class Transaction {
     @ManyToOne
     private Wallet wallet;
 
+    @ManyToOne
+    private User user;
+
     public Transaction() {
     }
 
-    public Transaction(int amount, String note, Date date, Category category, Wallet wallet) {
-        this.amount = amount;
-        this.note = note;
-        this.date = date;
-        this.category = category;
-        this.wallet = wallet;
-    }
-
-    public Transaction(Long id, int amount, String note, Date date, Category category, Wallet wallet) {
+    public Transaction(Long id, int amount, String note, Date date, Category category, Wallet wallet, User user) {
         this.id = id;
         this.amount = amount;
         this.note = note;
         this.date = date;
         this.category = category;
         this.wallet = wallet;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Transaction(int amount, String note, Date date, Category category, Wallet wallet, User user) {
+        this.amount = amount;
+        this.note = note;
+        this.date = date;
+        this.category = category;
+        this.wallet = wallet;
+        this.user = user;
     }
 
     public Long getId() {
