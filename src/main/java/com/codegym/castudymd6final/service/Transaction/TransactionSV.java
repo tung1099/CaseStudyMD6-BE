@@ -1,6 +1,7 @@
 package com.codegym.castudymd6final.service.Transaction;
 
 import com.codegym.castudymd6final.model.entity.Transaction;
+import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
 import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
 import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
 import com.codegym.castudymd6final.repository.ITransactionRepo;
@@ -26,7 +27,6 @@ public class TransactionSV implements ITransactionSV{
     @Override
     public void removeById(Long id) {
         transactionRepo.deleteById(id);
-
     }
 
     @Override
@@ -47,6 +47,11 @@ public class TransactionSV implements ITransactionSV{
     @Override
     public Iterable<SumInDay> getSumInDay(Long id) {
         return transactionRepo.getSumInDay(id);
+    }
+
+    @Override
+    public Iterable<AllTransactionWallet> getAllTransactionByIdWallet(Long id) {
+        return transactionRepo.getAllTransactionByIdWallet(id);
     }
 
 
