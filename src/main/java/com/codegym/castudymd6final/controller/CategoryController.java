@@ -1,6 +1,7 @@
 package com.codegym.castudymd6final.controller;
 
 
+import com.codegym.castudymd6final.model.dto.ShowCategory;
 import com.codegym.castudymd6final.model.entity.Category;
 import com.codegym.castudymd6final.service.category.ICategorySV;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class CategoryController {
     private ICategorySV categoryService;
 
     @GetMapping("/list")
-    public ResponseEntity<List<Category>> showAllCategory(){
+    public ResponseEntity<List<Category>> showAllCategory() {
         return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
     }
 
@@ -58,4 +59,11 @@ public class CategoryController {
         }
         return new ResponseEntity<>(categoryOptional.get(), HttpStatus.OK);
     }
+
+    @GetMapping("/list/{user_id}")
+    public ResponseEntity<Iterable<ShowCategory>> showAllCategoryByUserId(@PathVariable Long user_id) {
+        Iterable<ShowCategory> showCategories = categoryService.getAllCategoryByUserId(user_id);
+        return new ResponseEntity<>(showCategories, HttpStatus.OK);
+    }
+
 }
