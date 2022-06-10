@@ -2,12 +2,15 @@ package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.entity.Category;
 import com.codegym.castudymd6final.model.entity.Transaction;
+import com.codegym.castudymd6final.model.entity.User;
 import com.codegym.castudymd6final.model.entity.Wallet;
 import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
 import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
 import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
+import com.codegym.castudymd6final.model.transactionInDay.TransactionUser;
 import com.codegym.castudymd6final.service.Transaction.ITransactionSV;
 import com.codegym.castudymd6final.service.category.ICategorySV;
+import com.codegym.castudymd6final.service.user.IUserService;
 import com.codegym.castudymd6final.service.wallet.IWalletSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,24 +34,25 @@ public class TransactionController {
     private ITransactionSV transactionService;
 
 
+    @Autowired
+    private IUserService userService;
 
 
-    @PostMapping("/create")
-    public ResponseEntity<Transaction> saveTransaction(@RequestBody Transaction transaction) throws ParseException {
+    @PostMapping("/create/{idUser}")
+    public ResponseEntity<Transaction> saveTransaction(@PathVariable Long idUser, @RequestBody Transaction transaction) throws ParseException {
+        User user = userService.findById(idUser).get();
         Long id = transaction.getWallet().getId();
         Wallet wallet =  walletService.findById(id).get();
         int walletMoney = wallet.getBalance();
         int money = transaction.getAmount();
         wallet.setBalance(walletMoney - money);
-//        DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-//        Date date = new Date(String.valueOf(transaction.getDate()));
-//        Date todayWithZeroTime = formatter.parse(formatter.format(date));
-//        Transaction transaction1 = new Transaction(transaction.getAmount(), transaction.getNote(), date, transaction.getCategory(), transaction.getWallet());
-        return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.CREATED);
+        Transaction transaction1 = new Transaction(transaction.getAmount(), transaction.getNote(), transaction.getDate(), transaction.getCategory(), transaction.getWallet(), user);
+        return new ResponseEntity<>(transactionService.save(transaction1), HttpStatus.CREATED);
     }
 
-    @PutMapping("/editTransaction/{id}")
-    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction){
+    @PutMapping("/editTransaction/{id}/{idUser}")
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @PathVariable Long idUser, @RequestBody Transaction transaction){
+        User user = userService.findById(idUser).get();
         Transaction transaction1 = transactionService.findById(id).get();
         Long idWallet = transaction1.getWallet().getId();
         Wallet wallet = walletService.findById(idWallet).get();
@@ -58,7 +62,9 @@ public class TransactionController {
         Wallet wallet1 = walletService.findById(newIdWallet).get();
         wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
         Optional<Transaction> transactionOptional = transactionService.findById(id);
+//        Transaction transaction2 = new Transaction(transaction.getAmount(), transaction.getNote(), transaction.getDate(), transaction.getCategory(), transaction.getWallet(), user);
         transaction.setId(transactionOptional.get().getId());
+        transaction.setUser(user);
         return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.ACCEPTED);
     }
 
@@ -126,5 +132,10 @@ public class TransactionController {
     @GetMapping("/listTransaction")
     public ResponseEntity<Iterable<Transaction>> showAllTransaction(){
         return new ResponseEntity<>(transactionService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/listTransaction/{idUser}")
+    public ResponseEntity<Iterable<TransactionUser>> showAllTransactionByIdUser(@PathVariable Long idUser){
+        return new ResponseEntity<>(transactionService.getListTransactionUser(idUser), HttpStatus.OK);
     }
 }
