@@ -1,5 +1,6 @@
 package com.codegym.castudymd6final.service.wallet;
 
+import com.codegym.castudymd6final.model.entity.Transaction;
 import com.codegym.castudymd6final.model.entity.Wallet;
 import com.codegym.castudymd6final.repository.IWalletRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,10 @@ public class WalletSV implements IWalletSV{
     @Override
     public List<Wallet> getWalletByUserId(Long userId) {
         return walletRepo.getWalletByUserId(userId);
+    }
+
+    @Override
+    public void deleteWallet(Long wallet_id) {
+        walletRepo.deleteWallet(wallet_id);
     }
 }
