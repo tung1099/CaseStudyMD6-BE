@@ -61,10 +61,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/**");
         http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());//Tùy chỉnh lại thông báo 401 thông qua class restEntryPoint
         http.authorizeRequests()
-                .antMatchers("/**",
+                .antMatchers(
                         "/login",
+                        "/changePassword/**",
                         "/register").permitAll()
-                .antMatchers("/products/**")
+                .antMatchers("/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and().csrf().disable();
