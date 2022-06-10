@@ -149,7 +149,7 @@ public class WalletController {
         if (!walletOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        walletSV.removeById(id);
+        walletSV.deleteWallet(id);
         return new ResponseEntity<>(walletOptional.get(), HttpStatus.NO_CONTENT);
     }
 
