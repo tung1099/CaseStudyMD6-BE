@@ -115,11 +115,6 @@ public class TransactionController {
     @Autowired
     private ICategorySV categoryService;
 
-    @GetMapping("/listCate")
-    public ResponseEntity<List<Category>> showAllCategory(){
-        return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
-    }
-
     @Autowired
     private IWalletSV walletService;
 
