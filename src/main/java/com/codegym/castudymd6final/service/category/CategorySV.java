@@ -1,5 +1,6 @@
 package com.codegym.castudymd6final.service.category;
 
+import com.codegym.castudymd6final.model.dto.ShowCategory;
 import com.codegym.castudymd6final.model.entity.Category;
 import com.codegym.castudymd6final.repository.ICategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +33,11 @@ public class CategorySV implements ICategorySV{
     public Optional<Category> findById(Long id) {
         return categoryRepo.findById(id);
     }
+
+
+    @Override
+    public Iterable<ShowCategory> getAllCategoryByUserId(Long user_id) {
+        return categoryRepo.getAllCategoryByUserId(user_id);
+    }
+
 }
