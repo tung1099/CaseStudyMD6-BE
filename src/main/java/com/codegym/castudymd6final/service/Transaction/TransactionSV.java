@@ -36,8 +36,8 @@ public class TransactionSV implements ITransactionSV{
     }
 
     @Override
-    public Iterable<TransactionInDay> getTransactionInDay() {
-        return transactionRepo.getTransactionInDay();
+    public Iterable<TransactionInDay> getTransactionInDay(Long idUser) {
+        return transactionRepo.getTransactionInDay(idUser);
     }
 
     @Override

@@ -62,7 +62,6 @@ public class TransactionController {
         Wallet wallet1 = walletService.findById(newIdWallet).get();
         wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
         Optional<Transaction> transactionOptional = transactionService.findById(id);
-//        Transaction transaction2 = new Transaction(transaction.getAmount(), transaction.getNote(), transaction.getDate(), transaction.getCategory(), transaction.getWallet(), user);
         transaction.setId(transactionOptional.get().getId());
         transaction.setUser(user);
         return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.ACCEPTED);
@@ -90,9 +89,9 @@ public class TransactionController {
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 
-    @GetMapping("/transactionInDay")
-    public ResponseEntity<Iterable<TransactionInDay>> getTransactionInDay (){
-        Iterable<TransactionInDay> transactionInDays = transactionService.getTransactionInDay();
+    @GetMapping("/transactionInDay/{idUser}")
+    public ResponseEntity<Iterable<TransactionInDay>> getTransactionInDay (@PathVariable Long idUser){
+        Iterable<TransactionInDay> transactionInDays = transactionService.getTransactionInDay(idUser);
         return new ResponseEntity<>(transactionInDays, HttpStatus.OK);
     }
 

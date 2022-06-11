@@ -16,8 +16,8 @@ public interface ITransactionRepo extends JpaRepository<Transaction, Long> {
     @Query(nativeQuery = true, value = "select transactions.id as id, categories.name as category, transactions.amount as amount, w.name as wallet, transactions.note as note\n" +
             "            from transactions join categories on transactions.category_id = categories.id\n" +
             "              join wallets w on transactions.wallet_id = w.id\n" +
-            "            where transactions.date = current_date;")
-    Iterable<TransactionInDay> getTransactionInDay();
+            "            where transactions.date = current_date and transactions.user_id = ?;")
+    Iterable<TransactionInDay> getTransactionInDay(Long idUser);
 
     @Query(nativeQuery = true, value ="select transactions.id as id, categories.name as category, transactions.amount as amount, w.name as wallet, transactions.note as note\n" +
             "                      from transactions join categories on transactions.category_id = categories.id\n" +

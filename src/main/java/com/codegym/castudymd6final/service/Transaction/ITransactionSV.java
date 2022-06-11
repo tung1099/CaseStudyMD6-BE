@@ -9,7 +9,7 @@ import com.codegym.castudymd6final.service.IGeneralService;
 
 public interface ITransactionSV extends IGeneralService<Transaction> {
 
-    Iterable<TransactionInDay> getTransactionInDay();
+    Iterable<TransactionInDay> getTransactionInDay( Long id);
 
     Iterable<TransactionInDay> getTransactionInDayByIdWallet(Long id);
 
