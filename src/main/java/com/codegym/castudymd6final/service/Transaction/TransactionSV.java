@@ -1,8 +1,10 @@
 package com.codegym.castudymd6final.service.Transaction;
 
 import com.codegym.castudymd6final.model.entity.Transaction;
+import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
 import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
 import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
+import com.codegym.castudymd6final.model.transactionInDay.TransactionUser;
 import com.codegym.castudymd6final.repository.ITransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,6 @@ public class TransactionSV implements ITransactionSV{
     @Override
     public void removeById(Long id) {
         transactionRepo.deleteById(id);
-
     }
 
     @Override
@@ -35,8 +36,8 @@ public class TransactionSV implements ITransactionSV{
     }
 
     @Override
-    public Iterable<TransactionInDay> getTransactionInDay() {
-        return transactionRepo.getTransactionInDay();
+    public Iterable<TransactionInDay> getTransactionInDay(Long idUser) {
+        return transactionRepo.getTransactionInDay(idUser);
     }
 
     @Override
@@ -47,6 +48,16 @@ public class TransactionSV implements ITransactionSV{
     @Override
     public Iterable<SumInDay> getSumInDay(Long id) {
         return transactionRepo.getSumInDay(id);
+    }
+
+    @Override
+    public Iterable<AllTransactionWallet> getAllTransactionByIdWallet(Long id) {
+        return transactionRepo.getAllTransactionByIdWallet(id);
+    }
+
+    @Override
+    public Iterable<TransactionUser> getListTransactionUser(Long id) {
+        return transactionRepo.getListTransactionUser(id);
     }
 
 
