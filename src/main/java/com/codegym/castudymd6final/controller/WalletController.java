@@ -2,8 +2,7 @@ package com.codegym.castudymd6final.controller;
 
 
 import com.codegym.castudymd6final.model.entity.*;
-import com.codegym.castudymd6final.service.icon.IIconSV;
-import com.codegym.castudymd6final.service.wallet.IWalletSV;
+import com.codegym.castudymd6final.service.iconUser.IIconSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,25 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import com.codegym.castudymd6final.model.dto.WalletForm;
 import com.codegym.castudymd6final.model.entity.Wallet;
-import com.codegym.castudymd6final.repository.IUserRepository;
 import com.codegym.castudymd6final.service.moneyType.MoneyTypeSV;
 import com.codegym.castudymd6final.service.user.IUserService;
 import com.codegym.castudymd6final.service.wallet.WalletSV;
-import org.hibernate.annotations.Parameter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
