@@ -36,15 +36,16 @@ public class Wallet {
     public Wallet() {
     }
 
-    public Wallet(Icon icon, String name, MoneyType moneyType,  int total, int balance,  Date date, String note, User user) {
+    public Wallet(Long id, Icon icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
+        this.id = id;
         this.icon = icon;
         this.name = name;
         this.total = total;
+        this.balance = balance;
+        this.date = date;
         this.note = note;
         this.moneyType = moneyType;
         this.user = user;
-        this.balance = balance;
-        this.date = date;
     }
 
     public Wallet(Icon icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
@@ -58,13 +59,10 @@ public class Wallet {
         this.user = user;
     }
 
-    public Wallet(Long id, Icon icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
-        this.id = id;
+    public Wallet(String name, Icon icon,  int total, MoneyType moneyType, String note,  User user) {
         this.icon = icon;
         this.name = name;
         this.total = total;
-        this.balance = balance;
-        this.date = date;
         this.note = note;
         this.moneyType = moneyType;
         this.user = user;
