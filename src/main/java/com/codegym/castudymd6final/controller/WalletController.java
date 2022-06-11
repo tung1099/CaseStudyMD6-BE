@@ -1,9 +1,8 @@
 package com.codegym.castudymd6final.controller;
 
 
-import com.codegym.castudymd6final.model.entity.Category;
-import com.codegym.castudymd6final.model.entity.Wallet;
-import com.codegym.castudymd6final.service.wallet.IWalletSV;
+import com.codegym.castudymd6final.model.entity.*;
+import com.codegym.castudymd6final.service.iconUser.IIconSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,27 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import com.codegym.castudymd6final.model.dto.WalletForm;
-import com.codegym.castudymd6final.model.entity.MoneyType;
-import com.codegym.castudymd6final.model.entity.User;
 import com.codegym.castudymd6final.model.entity.Wallet;
-import com.codegym.castudymd6final.repository.IUserRepository;
 import com.codegym.castudymd6final.service.moneyType.MoneyTypeSV;
 import com.codegym.castudymd6final.service.user.IUserService;
 import com.codegym.castudymd6final.service.wallet.WalletSV;
-import org.hibernate.annotations.Parameter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -42,14 +28,6 @@ import java.util.Optional;
 @RequestMapping("/wallet")
 public class WalletController {
 
-    @Autowired
-    private IWalletSV walletService;
-
-    @GetMapping
-    public ResponseEntity<List<Wallet>> findAllWallet() {
-        List<Wallet> wallets = walletService.findAll();
-        return new ResponseEntity<>(wallets, HttpStatus.OK);
-    }
     @Autowired
     private WalletSV walletSV;
 
@@ -60,7 +38,16 @@ public class WalletController {
     private MoneyTypeSV moneyTypeSV;
 
     @Autowired
+    private IIconSV iconSV;
+
+    @Autowired
     private IUserService userService;
+
+    @GetMapping("/icon")
+    public ResponseEntity<List<Icon>> findAllIcon(){
+        List<Icon> icons = iconSV.findAll();
+        return new ResponseEntity<>(icons, HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Wallet> findWalletById(@PathVariable Long id){
@@ -89,58 +76,18 @@ public class WalletController {
         return new ResponseEntity<>(wallets, HttpStatus.OK);
     }
 
-//    @PostMapping("/{idUser}/create")
-//    public ResponseEntity<Wallet> saveWallet(@ModelAttribute WalletForm walletForm,  @PathVariable Long idUser){
-//        User user = userRepository.findById(idUser).get();
-//        walletForm.setBalance(walletForm.getTotal());
-//        MultipartFile multipartFile = walletForm.getIcon();
-//        String fileName = multipartFile.getOriginalFilename();
-//        String fileUpload = evn.getProperty("upload.path");
-//        try {
-//            FileCopyUtils.copy(fileName.getBytes(), new File(fileUpload + fileName));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        Wallet wallet = new Wallet(fileName, walletForm.getName(), walletForm.getTotal(), walletForm.getBalance(), new Date(), walletForm.getNote(), walletForm.getMoneyType(),user );
-//        walletSV.save(wallet);
-//        return new ResponseEntity<>(wallet, HttpStatus.CREATED);
-//    }
 
-    @PostMapping("/create/{idUser}")
-    public ResponseEntity<Wallet> saveWallet(@ModelAttribute WalletForm walletForm, @PathVariable Long idUser){
+    @PostMapping("/createWallet/{idUser}")
+    public ResponseEntity<Wallet> create(@ModelAttribute Wallet wallet, @PathVariable Long idUser) {
+
+//        wallet.setDate(new Date());
+
+//        wallet.setIcon(new Icon(1L,"https://static.moneylover.me/img/icon/icon.png"));
         User user = userService.findById(idUser).get();
-        walletForm.setBalance(walletForm.getTotal());
-        MultipartFile multipartFile = walletForm.getIcon();
-        String fileName = multipartFile.getOriginalFilename();
-        String fileUpload = evn.getProperty("upload.path");
-        try {
-            FileCopyUtils.copy(fileName.getBytes(), new File(fileUpload + fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Wallet wallet = new Wallet(fileName, walletForm.getName(), walletForm.getTotal(), walletForm.getMoneyType(), walletForm.getBalance(), new Date(), walletForm.getNote(),user );
-        walletSV.save(wallet);
-        return new ResponseEntity<>(wallet, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/{id}")
-    public ResponseEntity<Wallet> editWallet(@PathVariable Long id, @ModelAttribute WalletForm walletForm) {
-        Optional<Wallet> walletOptional = walletSV.findById(id);
-        walletForm.setId(walletOptional.get().getId());
-        MultipartFile multipartFile = walletForm.getIcon();
-        String fileName = multipartFile.getOriginalFilename();
-        String fileUpload = evn.getProperty("upload.path");
-        Wallet existWallet = new Wallet(id, fileName, walletForm.getName(), walletForm.getTotal(), walletForm.getBalance(), new Date(), walletForm.getNote(), walletForm.getMoneyType(),walletForm.getUser());
-        try {
-            FileCopyUtils.copy(multipartFile.getBytes(), new File(fileUpload + fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (existWallet.getIcon().equals("fileName.jpg")){
-            existWallet.setIcon(walletOptional.get().getIcon());
-        }
-        walletSV.save(existWallet);
-        return new ResponseEntity<>(existWallet, HttpStatus.OK);
+        Wallet wallet1 = new Wallet(wallet.getName(), wallet.getIcon(), wallet.getTotal(),wallet.getMoneyType(), wallet.getNote(), user );
+        wallet1.setDate(new Date());
+        wallet1.setBalance(wallet.getTotal());
+        return new ResponseEntity<>(walletSV.save(wallet1), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
