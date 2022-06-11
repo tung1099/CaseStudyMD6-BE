@@ -3,7 +3,9 @@ package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.dto.ShowCategory;
 import com.codegym.castudymd6final.model.entity.Category;
+import com.codegym.castudymd6final.model.entity.User;
 import com.codegym.castudymd6final.service.category.ICategorySV;
+import com.codegym.castudymd6final.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,23 +22,33 @@ public class    CategoryController {
     @Autowired
     private ICategorySV categoryService;
 
+    @Autowired
+    private IUserService userService;
+
     @GetMapping("/list")
     public ResponseEntity<List<Category>> showAllCategory() {
         return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Category> saveCategory(@RequestBody Category category) {
-        return new ResponseEntity<>(categoryService.save(category), HttpStatus.CREATED);
+    @PostMapping("/create/{user_id}")
+    public ResponseEntity<Category> saveCategory(@RequestBody Category category, @PathVariable Long user_id) {
+        User user = userService.findById(user_id).get();
+        Category category1 = new Category(category.getName(), user);
+        categoryService.save(category1);
+        return new ResponseEntity<>(category1, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category newCate) {
+    @PutMapping("/edit/{id}/{user_id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long user_id, @PathVariable Long id, @RequestBody Category newCate) {
         Optional<Category> categoryOptional = categoryService.findById(id);
         if (!categoryOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        newCate.setId(id);
+//        newCate.setId(id);
+        User user = userService.findById(user_id).get();
+        Category category1 = new Category(newCate.getName(), user);
+        categoryService.save(category1);
+        newCate.setId(user_id);
         return new ResponseEntity<>(categoryService.save(newCate), HttpStatus.OK);
     }
 

@@ -8,5 +8,4 @@ public interface ICategorySV extends IGeneralService<Category> {
 
     Iterable<ShowCategory> getAllCategoryByUserId(Long user_id);
 
-    void createCategory(Category category, Long user_id);
 }

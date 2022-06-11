@@ -40,8 +40,4 @@ public class CategorySV implements ICategorySV{
         return categoryRepo.getAllCategoryByUserId(user_id);
     }
 
-    @Override
-    public void createCategory(Category category, Long user_id) {
-        categoryRepo.createCategory(category, user_id);
-    }
 }
