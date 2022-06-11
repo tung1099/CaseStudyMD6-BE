@@ -41,9 +41,8 @@ public class    CategoryController {
     }
 
     @PutMapping("/edit/{id}/{user_id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long user_id, @PathVariable Long id, @RequestBody Category newCate) {
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @PathVariable Long user_id, @RequestBody Category category) {
         User user = userService.findById(user_id).get();
-        Category category = categoryService.findById(id).get();
         Optional<Category> categoryOptional = categoryService.findById(id);
         category.setId(categoryOptional.get().getId());
         category.setUser(user);
