@@ -3,7 +3,9 @@ package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.dto.ShowCategory;
 import com.codegym.castudymd6final.model.entity.Category;
+import com.codegym.castudymd6final.model.entity.Transaction;
 import com.codegym.castudymd6final.model.entity.User;
+import com.codegym.castudymd6final.model.entity.Wallet;
 import com.codegym.castudymd6final.service.category.ICategorySV;
 import com.codegym.castudymd6final.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +42,12 @@ public class    CategoryController {
 
     @PutMapping("/edit/{id}/{user_id}")
     public ResponseEntity<Category> updateCategory(@PathVariable Long user_id, @PathVariable Long id, @RequestBody Category newCate) {
-        Optional<Category> categoryOptional = categoryService.findById(id);
-        if (!categoryOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-//        newCate.setId(id);
         User user = userService.findById(user_id).get();
-        Category category1 = new Category(newCate.getName(), user);
-        categoryService.save(category1);
-        newCate.setId(user_id);
-        return new ResponseEntity<>(categoryService.save(newCate), HttpStatus.OK);
+        Category category = categoryService.findById(id).get();
+        Optional<Category> categoryOptional = categoryService.findById(id);
+        category.setId(categoryOptional.get().getId());
+        category.setUser(user);
+        return new ResponseEntity<>(categoryService.save(category), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
