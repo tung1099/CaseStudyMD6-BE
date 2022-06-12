@@ -99,4 +99,17 @@ public class WalletController {
         return new ResponseEntity<>(walletOptional.get(), HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("/editWallet/{id}/{idUser}")
+    public ResponseEntity<Wallet> editWallet(@RequestBody Wallet wallet, @PathVariable Long id, @PathVariable Long idUser){
+        Optional<Wallet> walletOptional = walletSV.findById(id);
+        if (!walletOptional.isPresent()) {
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User user = userService.findById(idUser).get();
+        Wallet wallet1 = new Wallet(id, wallet.getName(), wallet.getDate(), wallet.getIcon(), wallet.getMoneyType(), wallet.getTotal(), wallet.getBalance(), wallet.getNote(), user);
+        return new ResponseEntity<>(walletSV.save(wallet1), HttpStatus.OK);
+    }
+
+
+
 }
