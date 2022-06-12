@@ -79,11 +79,13 @@ public class WalletController {
 
     @PostMapping("/createWallet/{idUser}")
     public ResponseEntity<Wallet> create(@ModelAttribute Wallet wallet, @PathVariable Long idUser) {
-        wallet.setBalance(wallet.getTotal());
-        wallet.setDate(new Date());
-        wallet.setIcon(new Icon(1L,"https://static.moneylover.me/img/icon/icon.png"));
         User user = userService.findById(idUser).get();
-        Wallet wallet1 = new Wallet(wallet.getIcon(), wallet.getName(),wallet.getMoneyType(), wallet.getTotal(), wallet.getBalance(), wallet.getDate(), wallet.getNote(), user );
+        Wallet wallet1 = new Wallet(wallet.getName(), wallet.getIcon(), wallet.getTotal(),wallet.getMoneyType(), wallet.getNote(), user );
+        wallet1.setDate(new Date());
+        wallet1.setBalance(wallet.getTotal());
+        if (wallet1.getIcon() == null) {
+            wallet1.setIcon(new Icon(1L, "https://static.moneylover.me/img/icon/icon.png"));
+        }
         return new ResponseEntity<>(walletSV.save(wallet1), HttpStatus.OK);
     }
 
