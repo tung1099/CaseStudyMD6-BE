@@ -37,7 +37,7 @@ public class Wallet {
     }
 
 
-    public Wallet(Long id, Icon icon, String name, int total, int balance, Date date, String note, MoneyType moneyType, User user) {
+    public Wallet(Long id, String name, Date date, Icon icon, MoneyType moneyType, int total, int balance, String note, User user) {
         this.id = id;
         this.icon = icon;
         this.name = name;
@@ -69,11 +69,12 @@ public class Wallet {
         this.user = user;
     }
     public Wallet(String name,  int total, MoneyType moneyType, String note,  User user) {
-
         this.name = name;
         this.total = total;
         this.note = note;
         this.moneyType = moneyType;
         this.user = user;
     }
+
+
 }
