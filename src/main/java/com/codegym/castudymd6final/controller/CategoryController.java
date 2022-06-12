@@ -40,12 +40,11 @@ public class    CategoryController {
         return new ResponseEntity<>(category1, HttpStatus.CREATED);
     }
 
-    @PutMapping("/edit/{id}/{user_id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @PathVariable Long user_id, @RequestBody Category category) {
-        User user = userService.findById(user_id).get();
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         Optional<Category> categoryOptional = categoryService.findById(id);
+        category.setUser(categoryOptional.get().getUser());
         category.setId(categoryOptional.get().getId());
-        category.setUser(user);
         return new ResponseEntity<>(categoryService.save(category), HttpStatus.ACCEPTED);
     }
 

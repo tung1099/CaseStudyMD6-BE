@@ -35,4 +35,8 @@ public class AddMoney {
         this.date = date;
         this.wallet = wallet;
     }
+
+    public AddMoney(int money) {
+        this.money = money;
+    }
 }

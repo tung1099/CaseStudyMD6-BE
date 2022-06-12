@@ -40,7 +40,6 @@ public class AddMoneyController {
 
     @PostMapping("/{wallet_id}")
     public ResponseEntity<AddMoney> saveAddMoney(@RequestBody AddMoney addMoney, @PathVariable Long wallet_id) {
-        Long id = addMoney.getWallet().getId();
         Wallet wallet = walletService.findById(wallet_id).get();
         int walletMoney = wallet.getTotal();
         int balanceMoney = wallet.getBalance();
