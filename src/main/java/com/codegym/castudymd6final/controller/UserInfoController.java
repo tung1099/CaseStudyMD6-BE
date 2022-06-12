@@ -1,7 +1,9 @@
 package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.dto.AvatarForm;
+import com.codegym.castudymd6final.model.entity.User;
 import com.codegym.castudymd6final.model.entity.UserInfo;
+import com.codegym.castudymd6final.service.user.UserService;
 import com.codegym.castudymd6final.service.userInfo.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,8 +23,16 @@ public class UserInfoController {
     @Autowired
     private IUserInfoService userInfoService;
 
+    @Autowired
+    private UserService userService;
+
     @Value("${file-upload}")
     private String uploadPath;
+
+    @GetMapping("/findByUserId/{userId}")
+    public ResponseEntity<UserInfo> findByUserId(@PathVariable Long userId) {
+        return new ResponseEntity<>(userInfoService.findByUserId(userId), HttpStatus.OK);
+    }
 
     @PutMapping("/avatar/{id}")
     public ResponseEntity<UserInfo> editAvatar(@PathVariable Long id, @ModelAttribute AvatarForm avatarForm) {
@@ -41,8 +51,11 @@ public class UserInfoController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<UserInfo> updateProfile(@PathVariable Long id, @ModelAttribute UserInfo userInfo) {
+        Long userId = userInfoService.findUserByUserInfo(id);
+        User user = userService.findById(userId).get();
         userInfo.setId(id);
         userInfo.setAvatar(userInfoService.findById(id).get().getAvatar());
+        userInfo.setUser(user);
         userInfoService.save(userInfo);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }

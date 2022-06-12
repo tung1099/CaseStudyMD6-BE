@@ -32,4 +32,14 @@ public class UserInfoService implements IUserInfoService {
     public Optional<UserInfo> findById(Long id) {
         return userInfoRepository.findById(id);
     }
+
+    @Override
+    public UserInfo findByUserId(Long id) {
+        return userInfoRepository.findByUserId(id);
+    }
+
+    @Override
+    public Long findUserByUserInfo(Long id) {
+        return userInfoRepository.findUserByUserInfo(id);
+    }
 }
