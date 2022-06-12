@@ -1,8 +1,10 @@
 package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.entity.AddMoney;
+import com.codegym.castudymd6final.model.entity.User;
 import com.codegym.castudymd6final.model.entity.Wallet;
 import com.codegym.castudymd6final.service.addMoney.IAddMoneySV;
+import com.codegym.castudymd6final.service.user.IUserService;
 import com.codegym.castudymd6final.service.wallet.IWalletSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class AddMoneyController {
     @Autowired
     private IWalletSV walletService;
 
+    @Autowired
+    private IUserService userService;
+
     @GetMapping("/wallet")
     public ResponseEntity<List<Wallet>> showAllWallet() {
         List<Wallet> wallets = walletService.findAll();
@@ -33,10 +38,9 @@ public class AddMoneyController {
         return new ResponseEntity<>(addMoney, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<AddMoney> saveAddMoney(@RequestBody AddMoney addMoney) {
-        Long id = addMoney.getWallet().getId();
-        Wallet wallet = walletService.findById(id).get();
+    @PostMapping("/{wallet_id}")
+    public ResponseEntity<AddMoney> saveAddMoney(@RequestBody AddMoney addMoney, @PathVariable Long wallet_id) {
+        Wallet wallet = walletService.findById(wallet_id).get();
         int walletMoney = wallet.getTotal();
         int balanceMoney = wallet.getBalance();
         int money = addMoney.getMoney();
