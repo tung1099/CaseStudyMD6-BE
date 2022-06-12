@@ -1,9 +1,6 @@
 package com.codegym.castudymd6final.controller;
 
-import com.codegym.castudymd6final.model.entity.Category;
-import com.codegym.castudymd6final.model.entity.Transaction;
-import com.codegym.castudymd6final.model.entity.User;
-import com.codegym.castudymd6final.model.entity.Wallet;
+import com.codegym.castudymd6final.model.entity.*;
 import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
 import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
 import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
@@ -32,10 +29,14 @@ public class TransactionController {
 
     @Autowired
     private ITransactionSV transactionService;
-
-
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private ICategorySV categorySv;
+
+    @Autowired
+    private IWalletSV walletSv;
 
 
     @PostMapping("/create/{idUser}")
@@ -129,7 +130,7 @@ public class TransactionController {
     }
 
     @GetMapping("/listTransaction/{idUser}")
-    public ResponseEntity<Iterable<TransactionUser>> showAllTransactionByIdUser(@PathVariable Long idUser){
+    public ResponseEntity<List<Transaction>> showAllTransactionByIdUser(@PathVariable Long idUser){
         return new ResponseEntity<>(transactionService.getListTransactionUser(idUser), HttpStatus.OK);
     }
 }

@@ -15,6 +15,7 @@ import java.util.Optional;
 public class TransactionSV implements ITransactionSV{
     @Autowired
     private ITransactionRepo transactionRepo;
+
     @Override
     public List<Transaction> findAll() {
         return transactionRepo.findAll();
@@ -56,9 +57,10 @@ public class TransactionSV implements ITransactionSV{
     }
 
     @Override
-    public Iterable<TransactionUser> getListTransactionUser(Long id) {
+    public List<Transaction> getListTransactionUser(Long id) {
         return transactionRepo.getListTransactionUser(id);
     }
+
 
 
 }
