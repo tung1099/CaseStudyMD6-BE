@@ -1,8 +1,10 @@
 package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.entity.AddMoney;
+import com.codegym.castudymd6final.model.entity.User;
 import com.codegym.castudymd6final.model.entity.Wallet;
 import com.codegym.castudymd6final.service.addMoney.IAddMoneySV;
+import com.codegym.castudymd6final.service.user.IUserService;
 import com.codegym.castudymd6final.service.wallet.IWalletSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,9 @@ public class AddMoneyController {
 
     @Autowired
     private IWalletSV walletService;
+
+    @Autowired
+    private IUserService userService;
 
     @GetMapping("/wallet")
     public ResponseEntity<List<Wallet>> showAllWallet() {
