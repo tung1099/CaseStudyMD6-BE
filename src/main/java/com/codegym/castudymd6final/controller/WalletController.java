@@ -3,7 +3,9 @@ package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.dto.SumMoney;
 import com.codegym.castudymd6final.model.entity.*;
+import com.codegym.castudymd6final.service.addMoney.IAddMoneySV;
 import com.codegym.castudymd6final.service.iconUser.IIconSV;
+import com.codegym.castudymd6final.service.inout.IInOutSV;
 import com.codegym.castudymd6final.service.sumMoney.ISumMoneySV;
 import com.codegym.castudymd6final.service.wallet.IWalletSV;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,12 @@ public class WalletController {
     @Autowired
     private ISumMoneySV sumMoneySV;
 
+    @Autowired
+    private IAddMoneySV addMoneySV;
+
+    @Autowired
+    private IInOutSV inOutSV;
+
     @GetMapping("/icon")
     public ResponseEntity<List<Icon>> findAllIcon(){
         List<Icon> icons = iconSV.findAll();
@@ -89,6 +97,8 @@ public class WalletController {
         Wallet wallet1 = new Wallet(wallet.getName(), wallet.getIcon(), wallet.getTotal(),wallet.getMoneyType(), wallet.getNote(), user );
         wallet1.setDate(new Date());
         wallet1.setBalance(wallet.getTotal());
+        AddMoney addMoney = new AddMoney(wallet1.getTotal(), wallet1.getDate(), wallet1);
+        addMoneySV.save(addMoney);
         if (wallet1.getIcon() == null) {
             wallet1.setIcon(new Icon(1L, "https://static.moneylover.me/img/icon/icon.png"));
         }
@@ -120,6 +130,15 @@ public class WalletController {
     public ResponseEntity<List<SumMoney>> getSumMoney(@PathVariable Long idUser){
         List<SumMoney> sumMonies = sumMoneySV.getSumMoney(idUser);
         return new ResponseEntity<>(sumMonies, HttpStatus.OK);
+    }
+
+    @PostMapping("/inOut/{idWallet}/{month}")
+    public ResponseEntity<InOut> getInOut(@PathVariable Long idWallet,
+                                          @PathVariable int month) {
+        int inFlow = inOutSV.getInFlow(idWallet, month);
+        int outFlow = inOutSV.getOutFlow(idWallet, month);
+        InOut inOut = new InOut(month,inFlow, outFlow);
+        return new ResponseEntity<>(inOutSV.save(inOut), HttpStatus.CREATED);
     }
 
 

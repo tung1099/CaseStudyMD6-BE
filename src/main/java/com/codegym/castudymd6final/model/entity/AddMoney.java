@@ -17,7 +17,7 @@ public class AddMoney {
 
     private Date date;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Wallet wallet;
 
     public AddMoney() {
