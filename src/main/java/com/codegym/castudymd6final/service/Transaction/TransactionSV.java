@@ -9,6 +9,7 @@ import com.codegym.castudymd6final.repository.ITransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -66,5 +67,14 @@ public class TransactionSV implements ITransactionSV{
         return transactionRepo.findMoney(id);
     }
 
+    @Override
+    public Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id) {
+        return transactionRepo.getListTransactionInTime(date1, date2, id);
+    }
+
+    @Override
+    public Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet) {
+        return transactionRepo.getListTransactionInTimeByIdWallet(date1, date2, idWallet);
+    }
 
 }
