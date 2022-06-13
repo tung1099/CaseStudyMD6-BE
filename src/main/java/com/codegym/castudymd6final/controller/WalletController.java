@@ -141,9 +141,11 @@ public class WalletController {
         return new ResponseEntity<>(inOutSV.save(inOut), HttpStatus.CREATED);
     }
 
-
-
-
+    @GetMapping("/addMoney/{idWallet}")
+    public ResponseEntity <List<AddMoney>> getAllAddMoney(@PathVariable Long idWallet) {
+        List<AddMoney> addMonies = addMoneySV.getAddMoneyByWallet(idWallet);
+        return new ResponseEntity<>(addMonies, HttpStatus.OK);
+    }
 
 
 }
