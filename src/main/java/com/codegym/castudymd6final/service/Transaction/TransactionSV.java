@@ -37,12 +37,12 @@ public class TransactionSV implements ITransactionSV{
     }
 
     @Override
-    public Iterable<TransactionInDay> getTransactionInDay(Long idUser) {
+    public Iterable<Transaction> getTransactionInDay(Long idUser) {
         return transactionRepo.getTransactionInDay(idUser);
     }
 
     @Override
-    public Iterable<TransactionInDay> getTransactionInDayByIdWallet(Long id) {
+    public Iterable<Transaction> getTransactionInDayByIdWallet(Long id) {
         return transactionRepo.getTransactionInDayByIdWallet(id);
     }
 
@@ -52,7 +52,7 @@ public class TransactionSV implements ITransactionSV{
     }
 
     @Override
-    public Iterable<AllTransactionWallet> getAllTransactionByIdWallet(Long id) {
+    public Iterable<Transaction> getAllTransactionByIdWallet(Long id) {
         return transactionRepo.getAllTransactionByIdWallet(id);
     }
 
@@ -61,6 +61,10 @@ public class TransactionSV implements ITransactionSV{
         return transactionRepo.getListTransactionUser(id);
     }
 
+    @Override
+    public Long findMoney(Long id) {
+        return transactionRepo.findMoney(id);
+    }
 
 
 }
