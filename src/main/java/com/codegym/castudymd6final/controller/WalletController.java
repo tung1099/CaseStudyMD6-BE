@@ -1,8 +1,11 @@
 package com.codegym.castudymd6final.controller;
 
 
+import com.codegym.castudymd6final.model.dto.SumMoney;
 import com.codegym.castudymd6final.model.entity.*;
 import com.codegym.castudymd6final.service.iconUser.IIconSV;
+import com.codegym.castudymd6final.service.sumMoney.ISumMoneySV;
+import com.codegym.castudymd6final.service.wallet.IWalletSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +45,9 @@ public class WalletController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private ISumMoneySV sumMoneySV;
 
     @GetMapping("/icon")
     public ResponseEntity<List<Icon>> findAllIcon(){
@@ -109,6 +115,13 @@ public class WalletController {
         Wallet wallet1 = new Wallet(id, wallet.getName(), wallet.getDate(), wallet.getIcon(), wallet.getMoneyType(), wallet.getTotal(), wallet.getBalance(), wallet.getNote(), user);
         return new ResponseEntity<>(walletSV.save(wallet1), HttpStatus.OK);
     }
+
+    @GetMapping("/sumMoney/{idUser}")
+    public ResponseEntity<List<SumMoney>> getSumMoney(@PathVariable Long idUser){
+        List<SumMoney> sumMonies = sumMoneySV.getSumMoney(idUser);
+        return new ResponseEntity<>(sumMonies, HttpStatus.OK);
+    }
+
 
 
 
