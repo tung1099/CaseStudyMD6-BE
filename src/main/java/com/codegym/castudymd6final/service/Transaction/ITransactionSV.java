@@ -12,15 +12,18 @@ import java.util.List;
 
 public interface ITransactionSV extends IGeneralService<Transaction> {
 
-    Iterable<TransactionInDay> getTransactionInDay( Long id);
+    Iterable<Transaction> getTransactionInDay( Long id);
 
-    Iterable<TransactionInDay> getTransactionInDayByIdWallet(Long id);
+    Iterable<Transaction> getTransactionInDayByIdWallet(Long id);
 
     Iterable<SumInDay> getSumInDay(Long id);
 
-    Iterable<AllTransactionWallet> getAllTransactionByIdWallet(Long id);
+    Iterable<Transaction> getAllTransactionByIdWallet(Long id);
 
     List<Transaction> getListTransactionUser(Long id);
+
+    Long findMoney(Long id);
+
 
 
 }
