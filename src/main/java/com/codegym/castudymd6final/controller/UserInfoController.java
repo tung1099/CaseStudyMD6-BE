@@ -34,8 +34,9 @@ public class UserInfoController {
         return new ResponseEntity<>(userInfoService.findByUserId(userId), HttpStatus.OK);
     }
 
-    @PutMapping("/avatar/{id}")
-    public ResponseEntity<UserInfo> editAvatar(@PathVariable Long id, @ModelAttribute AvatarForm avatarForm) {
+    @PutMapping("/avatar/{userId}")
+    public ResponseEntity<UserInfo> editAvatar(@PathVariable Long userId, @ModelAttribute AvatarForm avatarForm) {
+        UserInfo userInfo = userInfoService.findByUserId(userId);
         MultipartFile multipartFile = avatarForm.getAvatar();
         String image = multipartFile.getOriginalFilename();
         try {
@@ -43,7 +44,6 @@ public class UserInfoController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        UserInfo userInfo = userInfoService.findById(id).get();
         userInfo.setAvatar(image);
         userInfoService.save(userInfo);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
