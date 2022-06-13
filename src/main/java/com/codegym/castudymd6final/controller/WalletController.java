@@ -117,10 +117,12 @@ public class WalletController {
     }
 
     @GetMapping("/sumMoney/{idUser}")
-    public ResponseEntity<List<SumMoney>> getSumMoney(@PathVariable Long idUser){
+    public ResponseEntity<List<SumMoney>> getSumMoney(@PathVariable Long idUser) {
         List<SumMoney> sumMonies = sumMoneySV.getSumMoney(idUser);
         return new ResponseEntity<>(sumMonies, HttpStatus.OK);
     }
+
+
 
 
 
