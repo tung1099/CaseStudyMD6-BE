@@ -32,12 +32,12 @@ public class InOutSV implements IInOutSV{
     }
 
     @Override
-    public int getInFlow(Long idWallet, int month) {
-        return inOutRepo.getInFlow(idWallet, month);
+    public int getInFlow(Long idWallet, int month, int year) {
+        return inOutRepo.getInFlow(idWallet, month, year);
     }
 
     @Override
-    public int getOutFlow(Long idWallet, int month) {
-        return inOutRepo.getOutFlow(idWallet, month);
+    public int getOutFlow(Long idWallet, int month, int year) {
+        return inOutRepo.getOutFlow(idWallet, month, year);
     }
 }

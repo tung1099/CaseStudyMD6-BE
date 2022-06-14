@@ -8,6 +8,7 @@ import com.codegym.castudymd6final.service.iconUser.IIconSV;
 import com.codegym.castudymd6final.service.inout.IInOutSV;
 import com.codegym.castudymd6final.service.sumMoney.ISumMoneySV;
 import com.codegym.castudymd6final.service.wallet.IWalletSV;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -132,12 +133,13 @@ public class WalletController {
         return new ResponseEntity<>(sumMonies, HttpStatus.OK);
     }
 
-    @PostMapping("/inOut/{idWallet}/{month}")
+    @PostMapping("/inOut/{idWallet}")
     public ResponseEntity<InOut> getInOut(@PathVariable Long idWallet,
-                                          @PathVariable int month) {
-        int inFlow = inOutSV.getInFlow(idWallet, month);
-        int outFlow = inOutSV.getOutFlow(idWallet, month);
-        InOut inOut = new InOut(month,inFlow, outFlow);
+                                          @RequestParam int month,
+                                          @RequestParam int year) {
+        int inFlow = inOutSV.getInFlow(idWallet, month, year);
+        int outFlow = inOutSV.getOutFlow(idWallet, month, year);
+        InOut inOut = new InOut(month, year, inFlow, outFlow);
         return new ResponseEntity<>(inOutSV.save(inOut), HttpStatus.CREATED);
     }
 

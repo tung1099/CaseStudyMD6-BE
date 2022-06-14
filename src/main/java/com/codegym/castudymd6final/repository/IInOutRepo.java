@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IInOutRepo extends CrudRepository<InOut, Long> {
-    @Query(nativeQuery = true, value = "select sum(money) as inFlow from add_money where wallet_id = ? and Month(date) = ? ;")
-    int getInFlow(Long idWallet, int month);
+    @Query(nativeQuery = true, value = "select sum(money) as inFlow from add_money where wallet_id = ? and Month(date) = ? and Year(date) = ? ;")
+    int getInFlow(Long idWallet, int month, int year);
 
-    @Query(nativeQuery = true, value = "select sum(amount) as outFlow from transactions where wallet_id = ? and Month(date) = ?;")
-    int getOutFlow(Long idWallet, int month);
+    @Query(nativeQuery = true, value = "select sum(amount) as outFlow from transactions where wallet_id = ? and Month(date) = ? and Year(date) = ?;")
+    int getOutFlow(Long idWallet, int month, int year);
 }

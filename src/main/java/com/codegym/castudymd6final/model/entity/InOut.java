@@ -13,6 +13,7 @@ public class InOut {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private int year;
 
     private int month;
 
@@ -34,8 +35,9 @@ public class InOut {
         this.outFlow = outFlow;
     }
 
-    public InOut(int month, int inFlow, int outFlow) {
+    public InOut(int month, int year, int inFlow, int outFlow) {
         this.month = month;
+        this.year = year;
         this.inFlow = inFlow;
         this.outFlow = outFlow;
     }
