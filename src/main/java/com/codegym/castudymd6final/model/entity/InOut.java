@@ -13,6 +13,7 @@ public class InOut {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private int year;
 
     private int month;
