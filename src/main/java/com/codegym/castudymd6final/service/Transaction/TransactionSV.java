@@ -9,6 +9,7 @@ import com.codegym.castudymd6final.repository.ITransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -61,6 +62,15 @@ public class TransactionSV implements ITransactionSV{
         return transactionRepo.getListTransactionUser(id);
     }
 
+    @Override
+    public Iterable<Transaction> findTransactionByUserAndDate(Long user_id, Date startDate, Date endDate) {
+        return transactionRepo.findTransactionByUserAndDate(user_id, startDate, endDate);
+    }
+
+    @Override
+    public Iterable<Transaction> findPaymentByUser(Long user_id) {
+        return transactionRepo.findPaymentByUser(user_id);
+    }
 
 
 }
