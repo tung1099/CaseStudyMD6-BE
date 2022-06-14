@@ -23,7 +23,6 @@ public interface ITransactionSV extends IGeneralService<Transaction> {
 
     List<Transaction> getListTransactionUser(Long id);
 
-    Long findMoney(Long id);
 
     Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id);
 

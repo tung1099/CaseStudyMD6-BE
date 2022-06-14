@@ -32,9 +32,6 @@ public interface ITransactionRepo extends JpaRepository<Transaction, Long> {
     @Query( nativeQuery = true, value = "select * from transactions where user_id = ?1" )
     List<Transaction> getListTransactionUser(Long id);
 
-    @Query(value = "select money_type_id from wallets where id = ?1", nativeQuery = true)
-    Long findMoney(Long id);
-
     @Query( nativeQuery = true, value = "SELECT * FROM transactions\n" +
             "WHERE date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE) group by id having user_id = ?;" )
     Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id);

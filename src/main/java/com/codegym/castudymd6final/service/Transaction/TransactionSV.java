@@ -62,10 +62,6 @@ public class TransactionSV implements ITransactionSV{
         return transactionRepo.getListTransactionUser(id);
     }
 
-    @Override
-    public Long findMoney(Long id) {
-        return transactionRepo.findMoney(id);
-    }
 
     @Override
     public Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id) {
