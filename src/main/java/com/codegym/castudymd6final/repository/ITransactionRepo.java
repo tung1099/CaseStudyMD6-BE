@@ -17,35 +17,27 @@ import java.util.List;
 @Repository
 public interface ITransactionRepo extends JpaRepository<Transaction, Long> {
 
-    @Query(nativeQuery = true, value = "select transactions.id as id, categories.name as category, transactions.amount as amount, w.name as wallet, transactions.note as note\n" +
-            "            from transactions join categories on transactions.category_id = categories.id\n" +
-            "              join wallets w on transactions.wallet_id = w.id\n" +
-            "            where transactions.date = current_date and transactions.user_id = ?;")
-    Iterable<TransactionInDay> getTransactionInDay(Long idUser);
+    @Query(nativeQuery = true, value = "select * from transactions where date = current_date and user_id = ?;")
+    Iterable<Transaction> getTransactionInDay(Long idUser);
 
-    @Query(nativeQuery = true, value ="select transactions.id as id, categories.name as category, transactions.amount as amount, w.name as wallet, transactions.note as note\n" +
-            "                      from transactions join categories on transactions.category_id = categories.id\n" +
-            "                         join wallets w on transactions.wallet_id = w.id\n" +
-            "                       where transactions.date = current_date and w.id = ?;")
-    Iterable<TransactionInDay> getTransactionInDayByIdWallet(Long id);
+    @Query(nativeQuery = true, value ="select * from transactions where date = current_date and wallet_id = ?;")
+    Iterable<Transaction> getTransactionInDayByIdWallet(Long id);
 
     @Query(nativeQuery = true, value = "select sum(amount) as total from transactions join wallets w on w.id = transactions.wallet_id where transactions.date = current_date and w.id = ?;\n")
     Iterable<SumInDay> getSumInDay(Long id);
 
-    @Query(nativeQuery = true, value ="select transactions.id as id, categories.name as category, transactions.amount as amount, w.name as wallet, transactions.note as note\n" +
-            "            , transactions.date as date from transactions join categories on transactions.category_id = categories.id\n" +
-            "                                  join wallets w on transactions.wallet_id = w.id\n" +
-            "                                  where w.id = ?;")
-    Iterable<AllTransactionWallet> getAllTransactionByIdWallet(Long id);
+    @Query(nativeQuery = true, value ="select * from transactions where wallet_id = ?;")
+    Iterable<Transaction> getAllTransactionByIdWallet(Long id);
 
-//    @Query( nativeQuery = true, value = "select transactions.id as id, transactions.amount, transactions.date, transactions.note, c.name as category, w.name as wallet from transactions join categories c on c.id = transactions.category_id join wallets w on w.id = transactions.wallet_id where transactions.user_id = ?;")
     @Query( nativeQuery = true, value = "select * from transactions where user_id = ?1" )
     List<Transaction> getListTransactionUser(Long id);
 
-    @Query(value = "select * from transactions join wallets on transaction.wallet_id = wallets.id where user_id = ?1 and date between ?2 and ?3", nativeQuery = true)
-    Iterable<Transaction> findTransactionByUserAndDate(Long user_id, Date startDate, Date endDate);
+    @Query( nativeQuery = true, value = "SELECT * FROM transactions\n" +
+            "WHERE date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE) group by id having user_id = ?;" )
+    Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id);
 
-    @Query(value = "select * from transactions join wallets on transactions.wallet_id = wallets.id where user_id = ?1", nativeQuery = true)
-    Iterable<Transaction> findPaymentByUser(Long user_id);
-
+    @Query( nativeQuery = true, value = "\n" +
+            "SELECT * FROM transactions\n" +
+            "WHERE date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE) group by id having wallet_id = ?;" )
+    Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet);
 }

@@ -14,6 +14,4 @@ public interface TransactionUser {
     String getCategory();
 
     String getWallet();
-
-
 }

@@ -91,20 +91,20 @@ public class TransactionController {
     }
 
     @GetMapping("/transactionInDay/{idUser}")
-    public ResponseEntity<Iterable<TransactionInDay>> getTransactionInDay (@PathVariable Long idUser){
-        Iterable<TransactionInDay> transactionInDays = transactionService.getTransactionInDay(idUser);
+    public ResponseEntity<Iterable<Transaction>> getTransactionInDay (@PathVariable Long idUser){
+        Iterable<Transaction> transactionInDays = transactionService.getTransactionInDay(idUser);
         return new ResponseEntity<>(transactionInDays, HttpStatus.OK);
     }
 
     @GetMapping("/transactionInDayByIdWallet/{id}")
-    public ResponseEntity<Iterable<TransactionInDay>> getTransactionInDayByIdWallet (@PathVariable Long id){
-        Iterable<TransactionInDay> transactionInDays = transactionService.getTransactionInDayByIdWallet(id);
+    public ResponseEntity<Iterable<Transaction>> getTransactionInDayByIdWallet (@PathVariable Long id){
+        Iterable<Transaction> transactionInDays = transactionService.getTransactionInDayByIdWallet(id);
         return new ResponseEntity<>(transactionInDays, HttpStatus.OK);
     }
 
     @GetMapping("/allTransactionByIdWallet/{id}")
-    public ResponseEntity<Iterable<AllTransactionWallet>> getAllTransactionByIdWallet (@PathVariable Long id){
-        Iterable<AllTransactionWallet> transactionInDays = transactionService.getAllTransactionByIdWallet(id);
+    public ResponseEntity<Iterable<Transaction>> getAllTransactionByIdWallet (@PathVariable Long id){
+        Iterable<Transaction> transactionInDays = transactionService.getAllTransactionByIdWallet(id);
         return new ResponseEntity<>(transactionInDays, HttpStatus.OK);
     }
 
@@ -134,4 +134,16 @@ public class TransactionController {
         return new ResponseEntity<>(transactionService.getListTransactionUser(idUser), HttpStatus.OK);
     }
 
+    @PostMapping("/transactionInTime/{idUser}")
+    public ResponseEntity<Iterable<Transaction>> getTransactionInTime (@PathVariable Long idUser,
+                                                                       @RequestBody DateDTO date){
+        Iterable<Transaction> transactionInTimes = transactionService.getListTransactionInTime(date.getDate1(), date.getDate2(), idUser);
+        return new ResponseEntity<>(transactionInTimes, HttpStatus.OK);
+    }
+
+    @PostMapping("/transactionInTimeByIdWallet")
+    public ResponseEntity<Iterable<Transaction>> getTransactionInTimeByIdWallet (@RequestBody DateDTO date){
+        Iterable<Transaction> transactionInTimes = transactionService.getListTransactionInTimeByIdWallet(date.getDate1(), date.getDate2(), date.getWallet().getId());
+        return new ResponseEntity<>(transactionInTimes, HttpStatus.OK);
+    }
 }
