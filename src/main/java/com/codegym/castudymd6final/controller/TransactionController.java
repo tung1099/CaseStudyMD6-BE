@@ -141,9 +141,9 @@ public class TransactionController {
         return new ResponseEntity<>(transactionInTimes, HttpStatus.OK);
     }
 
-    @PostMapping("/transactionInTimeByIdWallet/{id}")
-    public ResponseEntity<Iterable<Transaction>> getTransactionInTimeByIdWallet (@PathVariable Long id, @RequestBody DateDTO date){
-        Iterable<Transaction> transactionInTimes = transactionService.getListTransactionInTimeByIdWallet(date.getDate1(), date.getDate2(), id);
+    @PostMapping("/transactionInTimeByIdWallet")
+    public ResponseEntity<Iterable<Transaction>> getTransactionInTimeByIdWallet (@RequestBody DateDTO date){
+        Iterable<Transaction> transactionInTimes = transactionService.getListTransactionInTimeByIdWallet(date.getDate1(), date.getDate2(), date.getIdWallet());
         return new ResponseEntity<>(transactionInTimes, HttpStatus.OK);
     }
 }
