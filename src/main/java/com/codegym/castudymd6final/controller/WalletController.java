@@ -55,9 +55,6 @@ public class WalletController {
     private ISumMoneySV sumMoneySV;
 
     @Autowired
-    private IAddMoneySV addMoneySV;
-
-    @Autowired
     private IInOutSV inOutSV;
 
     @GetMapping("/icon")
