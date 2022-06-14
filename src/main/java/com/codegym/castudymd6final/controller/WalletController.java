@@ -137,10 +137,17 @@ public class WalletController {
     public ResponseEntity<InOut> getInOut(@PathVariable Long idWallet,
                                           @RequestParam int month,
                                           @RequestParam int year) {
-        int inFlow = inOutSV.getInFlow(idWallet, month, year);
-        int outFlow = inOutSV.getOutFlow(idWallet, month, year);
+
+         Integer inFlow = inOutSV.getInFlow(idWallet, month, year);
+         Integer outFlow = inOutSV.getOutFlow(idWallet, month, year);
+         if (inFlow == null){
+             inFlow = 0;
+         };
+         if (outFlow == null){
+             outFlow = 0;
+         };
         InOut inOut = new InOut(month, year, inFlow, outFlow);
-        return new ResponseEntity<>(inOutSV.save(inOut), HttpStatus.CREATED);
+        return new ResponseEntity<>(inOut, HttpStatus.OK);
     }
 
     @GetMapping("/addMoney/{idWallet}")
