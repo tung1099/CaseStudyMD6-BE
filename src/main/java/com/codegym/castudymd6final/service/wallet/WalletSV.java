@@ -1,12 +1,14 @@
 package com.codegym.castudymd6final.service.wallet;
 
 import com.codegym.castudymd6final.model.dto.SumMoney;
+import com.codegym.castudymd6final.model.entity.AddMoney;
 import com.codegym.castudymd6final.model.entity.Transaction;
 import com.codegym.castudymd6final.model.entity.Wallet;
 import com.codegym.castudymd6final.repository.IWalletRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Service
