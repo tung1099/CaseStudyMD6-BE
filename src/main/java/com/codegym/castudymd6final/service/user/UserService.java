@@ -5,8 +5,6 @@ import com.codegym.castudymd6final.model.entity.Role;
 import com.codegym.castudymd6final.model.entity.User;
 import com.codegym.castudymd6final.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;

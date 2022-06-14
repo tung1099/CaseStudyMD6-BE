@@ -2,16 +2,16 @@ package com.codegym.castudymd6final.model.transactionInDay;
 
 import java.util.Date;
 
-public interface    AllTransactionWallet {
+public interface TransactionUser {
     Long getId();
-
-    String getCategory();
 
     int getAmount();
 
-    String getWallet();
+    Date getDate();
 
     String getNote();
 
-    Date getDate();
+    String getCategory();
+
+    String getWallet();
 }

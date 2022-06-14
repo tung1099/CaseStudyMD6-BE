@@ -1,13 +1,13 @@
 package com.codegym.castudymd6final.controller;
 
-import com.codegym.castudymd6final.model.entity.Category;
-import com.codegym.castudymd6final.model.entity.Transaction;
-import com.codegym.castudymd6final.model.entity.Wallet;
+import com.codegym.castudymd6final.model.entity.*;
 import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
 import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
 import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
+import com.codegym.castudymd6final.model.transactionInDay.TransactionUser;
 import com.codegym.castudymd6final.service.Transaction.ITransactionSV;
 import com.codegym.castudymd6final.service.category.ICategorySV;
+import com.codegym.castudymd6final.service.user.IUserService;
 import com.codegym.castudymd6final.service.wallet.IWalletSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,26 +29,31 @@ public class TransactionController {
 
     @Autowired
     private ITransactionSV transactionService;
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private ICategorySV categorySv;
+
+    @Autowired
+    private IWalletSV walletSv;
 
 
-
-
-    @PostMapping("/create")
-    public ResponseEntity<Transaction> saveTransaction(@RequestBody Transaction transaction) throws ParseException {
+    @PostMapping("/create/{idUser}")
+    public ResponseEntity<Transaction> saveTransaction(@PathVariable Long idUser, @RequestBody Transaction transaction) throws ParseException {
+        User user = userService.findById(idUser).get();
         Long id = transaction.getWallet().getId();
         Wallet wallet =  walletService.findById(id).get();
         int walletMoney = wallet.getBalance();
         int money = transaction.getAmount();
         wallet.setBalance(walletMoney - money);
-//        DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-//        Date date = new Date(String.valueOf(transaction.getDate()));
-//        Date todayWithZeroTime = formatter.parse(formatter.format(date));
-//        Transaction transaction1 = new Transaction(transaction.getAmount(), transaction.getNote(), date, transaction.getCategory(), transaction.getWallet());
-        return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.CREATED);
+        Transaction transaction1 = new Transaction(transaction.getAmount(), transaction.getNote(), transaction.getDate(), transaction.getCategory(), transaction.getWallet(), user);
+        return new ResponseEntity<>(transactionService.save(transaction1), HttpStatus.CREATED);
     }
 
-    @PutMapping("/editTransaction/{id}")
-    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction){
+    @PutMapping("/editTransaction/{id}/{idUser}")
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @PathVariable Long idUser, @RequestBody Transaction transaction){
+        User user = userService.findById(idUser).get();
         Transaction transaction1 = transactionService.findById(id).get();
         Long idWallet = transaction1.getWallet().getId();
         Wallet wallet = walletService.findById(idWallet).get();
@@ -59,6 +64,7 @@ public class TransactionController {
         wallet1.setBalance(wallet1.getBalance() - transaction.getAmount());
         Optional<Transaction> transactionOptional = transactionService.findById(id);
         transaction.setId(transactionOptional.get().getId());
+        transaction.setUser(user);
         return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.ACCEPTED);
     }
 
@@ -84,21 +90,21 @@ public class TransactionController {
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 
-    @GetMapping("/transactionInDay")
-    public ResponseEntity<Iterable<TransactionInDay>> getTransactionInDay (){
-        Iterable<TransactionInDay> transactionInDays = transactionService.getTransactionInDay();
+    @GetMapping("/transactionInDay/{idUser}")
+    public ResponseEntity<Iterable<Transaction>> getTransactionInDay (@PathVariable Long idUser){
+        Iterable<Transaction> transactionInDays = transactionService.getTransactionInDay(idUser);
         return new ResponseEntity<>(transactionInDays, HttpStatus.OK);
     }
 
     @GetMapping("/transactionInDayByIdWallet/{id}")
-    public ResponseEntity<Iterable<TransactionInDay>> getTransactionInDayByIdWallet (@PathVariable Long id){
-        Iterable<TransactionInDay> transactionInDays = transactionService.getTransactionInDayByIdWallet(id);
+    public ResponseEntity<Iterable<Transaction>> getTransactionInDayByIdWallet (@PathVariable Long id){
+        Iterable<Transaction> transactionInDays = transactionService.getTransactionInDayByIdWallet(id);
         return new ResponseEntity<>(transactionInDays, HttpStatus.OK);
     }
 
     @GetMapping("/allTransactionByIdWallet/{id}")
-    public ResponseEntity<Iterable<AllTransactionWallet>> getAllTransactionByIdWallet (@PathVariable Long id){
-        Iterable<AllTransactionWallet> transactionInDays = transactionService.getAllTransactionByIdWallet(id);
+    public ResponseEntity<Iterable<Transaction>> getAllTransactionByIdWallet (@PathVariable Long id){
+        Iterable<Transaction> transactionInDays = transactionService.getAllTransactionByIdWallet(id);
         return new ResponseEntity<>(transactionInDays, HttpStatus.OK);
     }
 
@@ -109,11 +115,6 @@ public class TransactionController {
     }
     @Autowired
     private ICategorySV categoryService;
-
-    @GetMapping("/listCate")
-    public ResponseEntity<List<Category>> showAllCategory(){
-        return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
-    }
 
     @Autowired
     private IWalletSV walletService;
@@ -126,5 +127,23 @@ public class TransactionController {
     @GetMapping("/listTransaction")
     public ResponseEntity<Iterable<Transaction>> showAllTransaction(){
         return new ResponseEntity<>(transactionService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/listTransaction/{idUser}")
+    public ResponseEntity<List<Transaction>> showAllTransactionByIdUser(@PathVariable Long idUser){
+        return new ResponseEntity<>(transactionService.getListTransactionUser(idUser), HttpStatus.OK);
+    }
+
+    @PostMapping("/transactionInTime/{idUser}")
+    public ResponseEntity<Iterable<Transaction>> getTransactionInTime (@PathVariable Long idUser,
+                                                                       @RequestBody DateDTO date){
+        Iterable<Transaction> transactionInTimes = transactionService.getListTransactionInTime(date.getDate1(), date.getDate2(), idUser);
+        return new ResponseEntity<>(transactionInTimes, HttpStatus.OK);
+    }
+
+    @PostMapping("/transactionInTimeByIdWallet")
+    public ResponseEntity<Iterable<Transaction>> getTransactionInTimeByIdWallet (@RequestBody DateDTO date){
+        Iterable<Transaction> transactionInTimes = transactionService.getListTransactionInTimeByIdWallet(date.getDate1(), date.getDate2(), date.getWallet().getId());
+        return new ResponseEntity<>(transactionInTimes, HttpStatus.OK);
     }
 }

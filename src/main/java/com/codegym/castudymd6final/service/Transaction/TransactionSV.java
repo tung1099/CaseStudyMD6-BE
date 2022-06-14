@@ -4,16 +4,19 @@ import com.codegym.castudymd6final.model.entity.Transaction;
 import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
 import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
 import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
+import com.codegym.castudymd6final.model.transactionInDay.TransactionUser;
 import com.codegym.castudymd6final.repository.ITransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Service
 public class TransactionSV implements ITransactionSV{
     @Autowired
     private ITransactionRepo transactionRepo;
+
     @Override
     public List<Transaction> findAll() {
         return transactionRepo.findAll();
@@ -35,12 +38,12 @@ public class TransactionSV implements ITransactionSV{
     }
 
     @Override
-    public Iterable<TransactionInDay> getTransactionInDay() {
-        return transactionRepo.getTransactionInDay();
+    public Iterable<Transaction> getTransactionInDay(Long idUser) {
+        return transactionRepo.getTransactionInDay(idUser);
     }
 
     @Override
-    public Iterable<TransactionInDay> getTransactionInDayByIdWallet(Long id) {
+    public Iterable<Transaction> getTransactionInDayByIdWallet(Long id) {
         return transactionRepo.getTransactionInDayByIdWallet(id);
     }
 
@@ -50,9 +53,24 @@ public class TransactionSV implements ITransactionSV{
     }
 
     @Override
-    public Iterable<AllTransactionWallet> getAllTransactionByIdWallet(Long id) {
+    public Iterable<Transaction> getAllTransactionByIdWallet(Long id) {
         return transactionRepo.getAllTransactionByIdWallet(id);
     }
 
+    @Override
+    public List<Transaction> getListTransactionUser(Long id) {
+        return transactionRepo.getListTransactionUser(id);
+    }
+
+
+    @Override
+    public Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id) {
+        return transactionRepo.getListTransactionInTime(date1, date2, id);
+    }
+
+    @Override
+    public Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet) {
+        return transactionRepo.getListTransactionInTimeByIdWallet(date1, date2, idWallet);
+    }
 
 }
