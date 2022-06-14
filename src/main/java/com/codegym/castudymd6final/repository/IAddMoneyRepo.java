@@ -1,6 +1,7 @@
 package com.codegym.castudymd6final.repository;
 
 import com.codegym.castudymd6final.model.entity.AddMoney;
+import com.codegym.castudymd6final.model.entity.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

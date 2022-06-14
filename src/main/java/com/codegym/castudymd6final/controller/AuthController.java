@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -64,9 +65,9 @@ public class AuthController {
         UserInfo userInfo = new UserInfo(
                 user.getName(),
                 avatar,
-                user.getAddress(),
                 user.getPhoneNumber(),
                 user.getBirthDay(),
+                user.getAddress(),
                 user1
         );
         userInfoService.save(userInfo);
@@ -96,5 +97,18 @@ public class AuthController {
         this.userService.save(user.get());
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
 
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<Boolean> usernameExitCheck(@PathVariable String username) {
+        Boolean check = false;
+        List<User> users = this.userService.findAll();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUsername().equals(username)) {
+                check = true;
+                break;
+            }
+        }
+        return new ResponseEntity<>(check, HttpStatus.OK);
     }
 }
