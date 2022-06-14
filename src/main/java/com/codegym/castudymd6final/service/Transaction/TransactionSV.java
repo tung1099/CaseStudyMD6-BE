@@ -64,6 +64,11 @@ public class TransactionSV implements ITransactionSV{
 
 
     @Override
+    public Iterable<SumInDay> getSumTransactionWallet(Long id) {
+        return transactionRepo.getSumTransactionWallet(id);
+    }
+
+    @Override
     public Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id) {
         return transactionRepo.getListTransactionInTime(date1, date2, id);
     }
@@ -71,6 +76,16 @@ public class TransactionSV implements ITransactionSV{
     @Override
     public Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet) {
         return transactionRepo.getListTransactionInTimeByIdWallet(date1, date2, idWallet);
+    }
+
+    @Override
+    public int getInFlow(Long idWallet, int month, int year) {
+        return transactionRepo.getInFlow(idWallet, month, year);
+    }
+
+    @Override
+    public int getOutFlow(Long idWallet, int month, int year) {
+        return transactionRepo.getOutFlow(idWallet, month, year);
     }
 
 }

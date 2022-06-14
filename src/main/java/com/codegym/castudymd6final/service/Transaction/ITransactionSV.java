@@ -2,10 +2,7 @@ package com.codegym.castudymd6final.service.Transaction;
 
 import com.codegym.castudymd6final.model.entity.Transaction;
 import com.codegym.castudymd6final.model.entity.UserInfo;
-import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
-import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
-import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
-import com.codegym.castudymd6final.model.transactionInDay.TransactionUser;
+import com.codegym.castudymd6final.model.transactionInDay.*;
 import com.codegym.castudymd6final.service.IGeneralService;
 
 import java.util.Date;
@@ -24,6 +21,13 @@ public interface ITransactionSV extends IGeneralService<Transaction> {
     List<Transaction> getListTransactionUser(Long id);
 
 
+    Iterable<SumInDay> getSumTransactionWallet(Long id);
     Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id);
 
-    Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet);}
+    Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet);
+
+    int getInFlow(Long idWallet, int month, int year);
+
+    int getOutFlow(Long idWallet, int month, int year);
+
+}

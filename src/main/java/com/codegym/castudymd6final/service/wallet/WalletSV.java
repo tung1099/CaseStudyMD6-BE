@@ -1,5 +1,6 @@
 package com.codegym.castudymd6final.service.wallet;
 
+import com.codegym.castudymd6final.model.dto.SumMoney;
 import com.codegym.castudymd6final.model.entity.Transaction;
 import com.codegym.castudymd6final.model.entity.Wallet;
 import com.codegym.castudymd6final.repository.IWalletRepo;
@@ -43,4 +44,6 @@ public class WalletSV implements IWalletSV{
     public void deleteWallet(Long wallet_id) {
         walletRepo.deleteWallet(wallet_id);
     }
+
+
 }
