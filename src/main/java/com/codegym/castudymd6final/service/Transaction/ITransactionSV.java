@@ -8,6 +8,7 @@ import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
 import com.codegym.castudymd6final.model.transactionInDay.TransactionUser;
 import com.codegym.castudymd6final.service.IGeneralService;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ITransactionSV extends IGeneralService<Transaction> {
@@ -24,6 +25,6 @@ public interface ITransactionSV extends IGeneralService<Transaction> {
 
     Long findMoney(Long id);
 
+    Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id);
 
-
-}
+    Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet);}
