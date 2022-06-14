@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -40,5 +41,11 @@ public interface ITransactionRepo extends JpaRepository<Transaction, Long> {
 //    @Query( nativeQuery = true, value = "select transactions.id as id, transactions.amount, transactions.date, transactions.note, c.name as category, w.name as wallet from transactions join categories c on c.id = transactions.category_id join wallets w on w.id = transactions.wallet_id where transactions.user_id = ?;")
     @Query( nativeQuery = true, value = "select * from transactions where user_id = ?1" )
     List<Transaction> getListTransactionUser(Long id);
+
+    @Query(value = "select * from transactions join wallets on transaction.wallet_id = wallets.id where user_id = ?1 and date between ?2 and ?3", nativeQuery = true)
+    Iterable<Transaction> findTransactionByUserAndDate(Long user_id, Date startDate, Date endDate);
+
+    @Query(value = "select * from transactions join wallets on transactions.wallet_id = wallets.id where user_id = ?1", nativeQuery = true)
+    Iterable<Transaction> findPaymentByUser(Long user_id);
 
 }

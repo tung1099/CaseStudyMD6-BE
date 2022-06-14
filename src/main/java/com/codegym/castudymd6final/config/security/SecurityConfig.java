@@ -65,8 +65,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login",
                         "/image/**",
                         "/changePassword/**",
+                        "/username/**",
+                        "/**",
                         "/register").permitAll()
-                .antMatchers("/**")
+                .antMatchers("/a")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and().csrf().disable();

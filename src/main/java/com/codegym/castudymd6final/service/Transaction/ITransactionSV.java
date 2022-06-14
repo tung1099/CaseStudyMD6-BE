@@ -8,6 +8,7 @@ import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
 import com.codegym.castudymd6final.model.transactionInDay.TransactionUser;
 import com.codegym.castudymd6final.service.IGeneralService;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ITransactionSV extends IGeneralService<Transaction> {
@@ -21,6 +22,10 @@ public interface ITransactionSV extends IGeneralService<Transaction> {
     Iterable<AllTransactionWallet> getAllTransactionByIdWallet(Long id);
 
     List<Transaction> getListTransactionUser(Long id);
+
+    Iterable<Transaction> findTransactionByUserAndDate(Long user_id, Date startDate, Date endDate);
+    Iterable<Transaction> findPaymentByUser(Long user_id);
+
 
 
 }
