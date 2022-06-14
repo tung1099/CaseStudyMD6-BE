@@ -30,4 +30,9 @@ public class AddMoneySV implements IAddMoneySV {
     public Optional<AddMoney> findById(Long id) {
         return addMoneyRepo.findById(id);
     }
+
+    @Override
+    public List<AddMoney> getAddMoneyByWallet(Long idWallet) {
+        return addMoneyRepo.getAddMoneyByWallet(idWallet);
+    }
 }

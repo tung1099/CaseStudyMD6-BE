@@ -1,11 +1,15 @@
 package com.codegym.castudymd6final.service.Transaction;
 
 import com.codegym.castudymd6final.model.entity.Transaction;
-import com.codegym.castudymd6final.model.transactionInDay.*;
+import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
+import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
+import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
+import com.codegym.castudymd6final.model.transactionInDay.TransactionUser;
 import com.codegym.castudymd6final.repository.ITransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -69,9 +73,23 @@ public class TransactionSV implements ITransactionSV{
     }
 
     @Override
-    public Sum getSumMoney(Long id) {
-        return transactionRepo.getSumMoney(id);
+    public Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id) {
+        return transactionRepo.getListTransactionInTime(date1, date2, id);
     }
 
+    @Override
+    public Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet) {
+        return transactionRepo.getListTransactionInTimeByIdWallet(date1, date2, idWallet);
+    }
+
+    @Override
+    public int getInFlow(Long idWallet, int month, int year) {
+        return transactionRepo.getInFlow(idWallet, month, year);
+    }
+
+    @Override
+    public int getOutFlow(Long idWallet, int month, int year) {
+        return transactionRepo.getOutFlow(idWallet, month, year);
+    }
 
 }

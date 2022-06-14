@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -34,7 +35,19 @@ public interface ITransactionRepo extends JpaRepository<Transaction, Long> {
     @Query(value = "select money_type_id from wallets where id = ?1", nativeQuery = true)
     Long findMoney(Long id);
 
-    @Query(nativeQuery = true, value = "select sum(money) as money from add_money where month(current_time)  and wallet_id = ?;")
-    Sum getSumMoney(Long id);
+    @Query( nativeQuery = true, value = "SELECT * FROM transactions\n" +
+            "WHERE date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE) group by id having user_id = ?;" )
+    Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id);
+
+    @Query( nativeQuery = true, value = "\n" +
+            "SELECT * FROM transactions\n" +
+            "WHERE date BETWEEN CAST(? AS DATE) AND CAST(? AS DATE) group by id having wallet_id = ?;" )
+    Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet);
+
+    @Query(nativeQuery = true, value = "select sum(money) as inFlow from add_money where wallet_id = ? and Month(date) = ? and Year(date) = ? ;")
+    int getInFlow(Long idWallet, int month, int year);
+
+    @Query(nativeQuery = true, value = "select sum(amount) as outFlow from transactions where wallet_id = ? and Month(date) = ? and Year(date) = ?;")
+    int getOutFlow(Long idWallet, int month, int year);
 
 }

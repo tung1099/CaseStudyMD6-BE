@@ -5,6 +5,7 @@ import com.codegym.castudymd6final.model.entity.UserInfo;
 import com.codegym.castudymd6final.model.transactionInDay.*;
 import com.codegym.castudymd6final.service.IGeneralService;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ITransactionSV extends IGeneralService<Transaction> {
@@ -22,7 +23,12 @@ public interface ITransactionSV extends IGeneralService<Transaction> {
     Long findMoney(Long id);
 
     Iterable<SumInDay> getSumTransactionWallet(Long id);
+    Iterable<Transaction> getListTransactionInTime(Date date1, Date date2, Long id);
 
-    Sum getSumMoney(Long id);
+    Iterable<Transaction> getListTransactionInTimeByIdWallet(Date date1, Date date2, Long idWallet);
+
+    int getInFlow(Long idWallet, int month, int year);
+
+    int getOutFlow(Long idWallet, int month, int year);
 
 }
