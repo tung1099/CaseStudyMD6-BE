@@ -3,10 +3,9 @@ package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.dto.SumMoney;
 import com.codegym.castudymd6final.model.entity.*;
-import com.codegym.castudymd6final.service.Transaction.ITransactionSV;
 import com.codegym.castudymd6final.service.addMoney.IAddMoneySV;
 import com.codegym.castudymd6final.service.iconUser.IIconSV;
-
+import com.codegym.castudymd6final.service.inout.IInOutSV;
 import com.codegym.castudymd6final.service.sumMoney.ISumMoneySV;
 import com.codegym.castudymd6final.service.wallet.IWalletSV;
 import org.hibernate.annotations.Parameter;
@@ -45,9 +44,6 @@ public class WalletController {
     private MoneyTypeSV moneyTypeSV;
 
     @Autowired
-    private IAddMoneySV addMoneySV;
-
-    @Autowired
     private IIconSV iconSV;
 
     @Autowired
@@ -57,7 +53,10 @@ public class WalletController {
     private ISumMoneySV sumMoneySV;
 
     @Autowired
-    private ITransactionSV transactionService;
+    private IAddMoneySV addMoneySV;
+
+    @Autowired
+    private IInOutSV inOutSV;
 
     @GetMapping("/icon")
     public ResponseEntity<List<Icon>> findAllIcon(){
@@ -132,6 +131,16 @@ public class WalletController {
     public ResponseEntity<List<SumMoney>> getSumMoney(@PathVariable Long idUser) {
         List<SumMoney> sumMonies = sumMoneySV.getSumMoney(idUser);
         return new ResponseEntity<>(sumMonies, HttpStatus.OK);
+    }
+
+    @PostMapping("/inOut/{idWallet}")
+    public ResponseEntity<InOut> getInOut(@PathVariable Long idWallet,
+                                          @RequestParam int month,
+                                          @RequestParam int year) {
+        int inFlow = inOutSV.getInFlow(idWallet, month, year);
+        int outFlow = inOutSV.getOutFlow(idWallet, month, year);
+        InOut inOut = new InOut(month, year, inFlow, outFlow);
+        return new ResponseEntity<>(inOutSV.save(inOut), HttpStatus.CREATED);
     }
 
     @GetMapping("/addMoney/{idWallet}")

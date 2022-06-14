@@ -7,8 +7,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
+@Entity
+@Data
 public class InOut {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private int year;
+
+    private int month;
 
     private int inFlow;
 
@@ -22,19 +30,16 @@ public class InOut {
         this.outFlow = outFlow;
     }
 
-    public int getInFlow() {
-        return inFlow;
-    }
-
-    public void setInFlow(int inFlow) {
+    public InOut(Long id, int inFlow, int outFlow) {
+        this.id = id;
         this.inFlow = inFlow;
+        this.outFlow = outFlow;
     }
 
-    public int getOutFlow() {
-        return outFlow;
-    }
-
-    public void setOutFlow(int outFlow) {
+    public InOut(int month, int year, int inFlow, int outFlow) {
+        this.month = month;
+        this.year = year;
+        this.inFlow = inFlow;
         this.outFlow = outFlow;
     }
 }
