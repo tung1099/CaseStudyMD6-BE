@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import java.util.Date;
 
 public class DateDTO {
-    Long idWallet;
+    Wallet wallet;
     Date date1;
     Date date2;
 
@@ -13,8 +13,9 @@ public class DateDTO {
         this.date2 = date2;
     }
 
-    public DateDTO(Long idWallet, Date date1, Date date2) {
-        this.idWallet = idWallet;
+
+    public DateDTO(Wallet wallet, Date date1, Date date2) {
+        this.wallet = wallet;
         this.date1 = date1;
         this.date2 = date2;
     }
@@ -38,11 +39,11 @@ public class DateDTO {
         this.date2 = date2;
     }
 
-    public Long getIdWallet() {
-        return idWallet;
+    public Wallet getWallet() {
+        return wallet;
     }
 
-    public void setIdWallet(Long idWallet) {
-        this.idWallet = idWallet;
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 }
