@@ -2,6 +2,7 @@ package com.codegym.castudymd6final.controller;
 
 
 import com.codegym.castudymd6final.model.entity.*;
+import com.codegym.castudymd6final.service.addMoney.IAddMoneySV;
 import com.codegym.castudymd6final.service.iconUser.IIconSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,9 @@ public class WalletController {
 
     @Autowired
     private MoneyTypeSV moneyTypeSV;
+
+    @Autowired
+    private IAddMoneySV addMoneySV;
 
     @Autowired
     private IIconSV iconSV;
@@ -83,6 +87,8 @@ public class WalletController {
         Wallet wallet1 = new Wallet(wallet.getName(), wallet.getIcon(), wallet.getTotal(),wallet.getMoneyType(), wallet.getNote(), user );
         wallet1.setDate(new Date());
         wallet1.setBalance(wallet.getTotal());
+        AddMoney addMoney = new AddMoney(wallet1.getTotal(), wallet1.getDate(), wallet1);
+        addMoneySV.save(addMoney);
         if (wallet1.getIcon() == null) {
             wallet1.setIcon(new Icon(1L, "https://static.moneylover.me/img/icon/icon.png"));
         }

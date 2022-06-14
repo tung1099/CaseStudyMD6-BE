@@ -1,10 +1,7 @@
 package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.entity.*;
-import com.codegym.castudymd6final.model.transactionInDay.AllTransactionWallet;
-import com.codegym.castudymd6final.model.transactionInDay.SumInDay;
-import com.codegym.castudymd6final.model.transactionInDay.TransactionInDay;
-import com.codegym.castudymd6final.model.transactionInDay.TransactionUser;
+import com.codegym.castudymd6final.model.transactionInDay.*;
 import com.codegym.castudymd6final.service.Transaction.ITransactionSV;
 import com.codegym.castudymd6final.service.category.ICategorySV;
 import com.codegym.castudymd6final.service.user.IUserService;
@@ -113,6 +110,13 @@ public class TransactionController {
         Iterable<SumInDay> sum = transactionService.getSumInDay(id);
         return new ResponseEntity<>(sum, HttpStatus.OK);
     }
+
+    @GetMapping("/sumTransactionWallet/{id}")
+    public ResponseEntity<Iterable<SumInDay>> getSumTransactionWallet(@PathVariable Long id){
+        Iterable<SumInDay> sum = transactionService.getSumTransactionWallet(id);
+        return new ResponseEntity<>(sum, HttpStatus.OK);
+    }
+
     @Autowired
     private ICategorySV categoryService;
 
