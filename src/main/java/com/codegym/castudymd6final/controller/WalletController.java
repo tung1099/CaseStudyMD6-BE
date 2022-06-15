@@ -113,6 +113,7 @@ public class WalletController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         walletSV.deleteWallet(id);
+        addMoneySV.removeById(id);
         return new ResponseEntity<>(walletOptional.get(), HttpStatus.NO_CONTENT);
     }
 
@@ -137,7 +138,7 @@ public class WalletController {
     public ResponseEntity<InOut> getInOut(@PathVariable Long idWallet,
                                           @RequestParam int month,
                                           @RequestParam int year) {
-
+        Wallet wallet = walletSV.findById(idWallet).get();
          Integer inFlow = inOutSV.getInFlow(idWallet, month, year);
          Integer outFlow = inOutSV.getOutFlow(idWallet, month, year);
          if (inFlow == null){
@@ -146,7 +147,7 @@ public class WalletController {
          if (outFlow == null){
              outFlow = 0;
          };
-        InOut inOut = new InOut(month, year, inFlow, outFlow);
+        InOut inOut = new InOut(month, year, inFlow, outFlow, wallet);
         return new ResponseEntity<>(inOut, HttpStatus.OK);
     }
 
