@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +46,9 @@ public class TransactionController {
         int money = transaction.getAmount();
         wallet.setBalance(walletMoney - money);
         Transaction transaction1 = new Transaction(transaction.getAmount(), transaction.getNote(), transaction.getDate(), transaction.getCategory(), transaction.getWallet(), user);
+        if (transaction1.getDate() == null) {
+            transaction1.setDate(new Date());
+        }
         return new ResponseEntity<>(transactionService.save(transaction1), HttpStatus.CREATED);
     }
 

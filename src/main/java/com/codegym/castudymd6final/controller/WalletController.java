@@ -134,7 +134,7 @@ public class WalletController {
         return new ResponseEntity<>(sumMonies, HttpStatus.OK);
     }
 
-    @PostMapping("/inOut/{idWallet}")
+    @GetMapping("/inOut/{idWallet}")
     public ResponseEntity<InOut> getInOut(@PathVariable Long idWallet,
                                           @RequestParam int month,
                                           @RequestParam int year) {
