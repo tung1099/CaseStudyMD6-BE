@@ -2,10 +2,7 @@ package com.codegym.castudymd6final.model.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -22,24 +19,74 @@ public class InOut {
 
     private int outFlow;
 
+    @ManyToOne
+    private Wallet wallet;
+
     public InOut() {
     }
 
-    public InOut(int inFlow, int outFlow) {
-        this.inFlow = inFlow;
-        this.outFlow = outFlow;
-    }
-
-    public InOut(Long id, int inFlow, int outFlow) {
+    public InOut(Long id, int year, int month, int inFlow, int outFlow, Wallet wallet) {
         this.id = id;
+        this.year = year;
+        this.month = month;
         this.inFlow = inFlow;
+        this.outFlow = outFlow;
+        this.wallet = wallet;
+    }
+
+    public InOut(int year, int month, int inFlow, int outFlow, Wallet wallet) {
+        this.year = year;
+        this.month = month;
+        this.inFlow = inFlow;
+        this.outFlow = outFlow;
+        this.wallet = wallet;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getInFlow() {
+        return inFlow;
+    }
+
+    public void setInFlow(int inFlow) {
+        this.inFlow = inFlow;
+    }
+
+    public int getOutFlow() {
+        return outFlow;
+    }
+
+    public void setOutFlow(int outFlow) {
         this.outFlow = outFlow;
     }
 
-    public InOut(int month, int year, int inFlow, int outFlow) {
-        this.month = month;
-        this.year = year;
-        this.inFlow = inFlow;
-        this.outFlow = outFlow;
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 }
