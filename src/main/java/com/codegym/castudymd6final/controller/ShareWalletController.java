@@ -28,13 +28,13 @@ public class ShareWalletController {
     private WalletSV walletSV;
 
     @GetMapping("/list/{userId}")
-    public ResponseEntity<List<ShareWallet>> findALlSharedWallet(@PathVariable Long userId) {
-        List<ShareWallet> shareWallets = new ArrayList<>();
+    public ResponseEntity<List<Wallet>> findALlSharedWallet(@PathVariable Long userId) {
+        List<Wallet> wallets = new ArrayList<>();
         List<Long> list = shareWalletService.findListWalletShare(userId);
         for (int i = 0 ; i < list.size(); i++) {
-            shareWallets.add(shareWalletService.findById(list.get(i)).get());
+            wallets.add(walletSV.findById(list.get(i)).get());
         }
-        return new ResponseEntity<>(shareWallets, HttpStatus.OK);
+        return new ResponseEntity<>(wallets, HttpStatus.OK);
     }
 
     @PostMapping("create/{walletId}")
@@ -48,6 +48,12 @@ public class ShareWalletController {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
                 ShareWallet shareWallet = new ShareWallet(user1, wallet);
+                List<ShareWallet> shareWallets = shareWalletService.findAll();
+                for (ShareWallet shareWallet1 : shareWallets) {
+                    if (shareWallet1.getWallet().getId() == shareWallet.getWallet().getId() && shareWallet1.getUser().getId() == shareWallet.getUser().getId()) {
+                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    }
+                }
                 shareWalletService.save(shareWallet);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
