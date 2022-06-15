@@ -106,6 +106,16 @@ public class WalletController {
         return new ResponseEntity<>(walletSV.save(wallet1), HttpStatus.OK);
     }
 
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Wallet> deleteWallet(@PathVariable Long id) {
+//        Optional<Wallet> walletOptional = walletSV.findById(id);
+//        if (!walletOptional.isPresent()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        walletSV.deleteWallet(id);
+//        addMoneySV.removeById(id);
+//        return new ResponseEntity<>(walletOptional.get(), HttpStatus.NO_CONTENT);
+//    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Wallet> deleteWallet(@PathVariable Long id) {
         Optional<Wallet> walletOptional = walletSV.findById(id);
@@ -113,9 +123,9 @@ public class WalletController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         walletSV.deleteWallet(id);
-        addMoneySV.removeById(id);
         return new ResponseEntity<>(walletOptional.get(), HttpStatus.NO_CONTENT);
     }
+
 
     @PutMapping("/editWallet/{id}/{idUser}")
     public ResponseEntity<Wallet> editWallet(@RequestBody Wallet wallet, @PathVariable Long id, @PathVariable Long idUser){
