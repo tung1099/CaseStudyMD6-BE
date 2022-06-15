@@ -91,6 +91,16 @@ public class WalletController {
         return new ResponseEntity<>(wallets, HttpStatus.OK);
     }
 
+    @GetMapping("/getWallet/{idUser}/{idWallet}")
+    public ResponseEntity<Wallet> findWallet(@PathVariable Long idUser,
+                                             @PathVariable Long idWallet) {
+        Wallet wallet = walletSV.findById(idWallet).get();
+        if (wallet.getUser().getId() != idUser) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(wallet, HttpStatus.OK);
+    }
+
 
     @PostMapping("/createWallet/{idUser}")
     public ResponseEntity<Wallet> create(@ModelAttribute Wallet wallet, @PathVariable Long idUser) {
