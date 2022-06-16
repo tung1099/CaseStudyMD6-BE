@@ -1,6 +1,7 @@
 package com.codegym.castudymd6final.controller;
 
 import com.codegym.castudymd6final.model.entity.AddMoney;
+import com.codegym.castudymd6final.model.entity.DateDTO;
 import com.codegym.castudymd6final.model.entity.User;
 import com.codegym.castudymd6final.model.entity.Wallet;
 import com.codegym.castudymd6final.service.addMoney.IAddMoneySV;
@@ -48,6 +49,12 @@ public class AddMoneyController {
         wallet.setBalance(balanceMoney + money);
         AddMoney addMoney1 = new AddMoney(money, new Date(), wallet);
         return new ResponseEntity<>(addMoneyService.save(addMoney1), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/addMoneyInTimeByIdWallet")
+    public ResponseEntity<Iterable<AddMoney>> getAddMoneyInTimeByIdWallet (@RequestBody DateDTO date){
+        Iterable<AddMoney> addMoneyInTimes = addMoneyService.getListAddMoneyInTimeByIdWallet(date.getDate1(), date.getDate2(), date.getWallet().getId());
+        return new ResponseEntity<>(addMoneyInTimes, HttpStatus.OK);
     }
 }
 
