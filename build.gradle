@@ -27,10 +27,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-taglibs', version: '5.4.2'
     //jwt
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-    //excel
-    implementation group: 'org.apache.poi', name: 'poi', version: '4.0.1'
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+
 }
 
 tasks.named('test') {
