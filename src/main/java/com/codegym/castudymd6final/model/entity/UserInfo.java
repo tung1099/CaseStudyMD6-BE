@@ -44,4 +44,11 @@ public class UserInfo {
         this.address = address;
         this.user = user;
     }
+
+    public UserInfo(String name, String phoneNumber, String birthDay, String address) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.birthDay = birthDay;
+        this.address = address;
+    }
 }

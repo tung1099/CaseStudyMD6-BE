@@ -6,6 +6,7 @@ import com.codegym.castudymd6final.model.entity.*;
 import com.codegym.castudymd6final.service.addMoney.IAddMoneySV;
 import com.codegym.castudymd6final.service.iconUser.IIconSV;
 import com.codegym.castudymd6final.service.inout.IInOutSV;
+import com.codegym.castudymd6final.service.shareWallet.IShareWalletService;
 import com.codegym.castudymd6final.service.sumMoney.ISumMoneySV;
 import com.codegym.castudymd6final.service.wallet.IWalletSV;
 import org.hibernate.annotations.Parameter;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.codegym.castudymd6final.model.entity.Wallet;
@@ -58,6 +60,9 @@ public class WalletController {
     @Autowired
     private IInOutSV inOutSV;
 
+    @Autowired
+    private IShareWalletService shareWalletService;
+
     @GetMapping("/icon")
     public ResponseEntity<List<Icon>> findAllIcon(){
         List<Icon> icons = iconSV.findAll();
@@ -96,11 +101,20 @@ public class WalletController {
     @GetMapping("/getWallet/{idUser}/{idWallet}")
     public ResponseEntity<Wallet> findWallet(@PathVariable Long idUser,
                                              @PathVariable Long idWallet) {
+        boolean check = false;
+        List<Long> list = shareWalletService.findWhoWasShared(idWallet);
         Wallet wallet = walletSV.findById(idWallet).get();
-        if (wallet.getUser().getId() != idUser) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        list.add(wallet.getUser().getId());
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) == idUser) {
+                check = true;
+            }
         }
-        return new ResponseEntity<>(wallet, HttpStatus.OK);
+        if (!check) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(wallet, HttpStatus.OK);
+        }
     }
 
 
@@ -157,7 +171,7 @@ public class WalletController {
         return new ResponseEntity<>(sumMonies, HttpStatus.OK);
     }
 
-    @PostMapping("/inOut/{idWallet}")
+    @GetMapping("/inOut/{idWallet}")
     public ResponseEntity<InOut> getInOut(@PathVariable Long idWallet,
                                           @RequestParam int month,
                                           @RequestParam int year) {

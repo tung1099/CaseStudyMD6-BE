@@ -35,4 +35,10 @@ public class ShareWalletService implements IShareWalletService{
     public List<Long> findListWalletShare(Long id) {
         return shareWalletRepository.findListWalletShare(id);
     }
+
+    @Override
+    public List<Long> findWhoWasShared(Long id) {
+        return shareWalletRepository.findWhoWasShared(id);
+    }
+
 }

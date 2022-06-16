@@ -66,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/image/**",
                         "/changePassword/**",
                         "/username/**",
+                        "/userInfo/**",
                         "/**",
                         "/register").permitAll()
                 .antMatchers("/a")

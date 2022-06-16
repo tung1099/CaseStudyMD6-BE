@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +33,6 @@ public class TransactionController {
     @Autowired
     private ICategorySV categorySv;
 
-    @Autowired
-    private IWalletSV walletSv;
 
 
     @PostMapping("/create/{idUser}")
@@ -45,6 +44,9 @@ public class TransactionController {
         int money = transaction.getAmount();
         wallet.setBalance(walletMoney - money);
         Transaction transaction1 = new Transaction(transaction.getAmount(), transaction.getNote(), transaction.getDate(), transaction.getCategory(), transaction.getWallet(), user);
+        if (transaction1.getDate() == null) {
+            transaction1.setDate(new Date());
+        }
         return new ResponseEntity<>(transactionService.save(transaction1), HttpStatus.CREATED);
     }
 
@@ -156,5 +158,14 @@ public class TransactionController {
     public ResponseEntity<Iterable<Transaction>> getTransactionInTimeByIdWallet (@RequestBody DateDTO date){
         Iterable<Transaction> transactionInTimes = transactionService.getListTransactionInTimeByIdWallet(date.getDate1(), date.getDate2(), date.getWallet().getId());
         return new ResponseEntity<>(transactionInTimes, HttpStatus.OK);
+    }
+
+    @GetMapping("/check/{walletId}/{amount}")
+    public ResponseEntity<Boolean> check(@PathVariable Long walletId, @PathVariable Long amount) {
+        Wallet wallet = walletService.findById(walletId).get();
+        if (amount > wallet.getBalance()) {
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

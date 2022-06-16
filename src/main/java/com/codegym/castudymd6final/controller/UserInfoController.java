@@ -49,20 +49,21 @@ public class UserInfoController {
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<UserInfo> updateProfile(@PathVariable Long id, @ModelAttribute UserInfo userInfo) {
-        Long userId = userInfoService.findUserByUserInfo(id);
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<UserInfo> updateProfile(@PathVariable Long userId, @ModelAttribute UserInfo userInfo) {
+        UserInfo userInfo1 = userInfoService.findByUserId(userId);
         User user = userService.findById(userId).get();
-        userInfo.setId(id);
-        userInfo.setAvatar(userInfoService.findById(id).get().getAvatar());
+        userInfo.setId(userInfo1.getId());
+        userInfo.setAvatar(userInfo1.getAvatar());
         userInfo.setUser(user);
         userInfoService.save(userInfo);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<UserInfo> deleteUserInfo(@PathVariable Long id) {
-        userInfoService.removeById(id);
-        return new ResponseEntity<>(userInfoService.findById(id).get(), HttpStatus.OK);
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<UserInfo> deleteUserInfo(@PathVariable Long userId) {
+        UserInfo userInfo1 = userInfoService.findByUserId(userId);
+        userInfoService.removeById(userInfo1.getId());
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 }
