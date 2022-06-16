@@ -1,8 +1,10 @@
 package com.codegym.castudymd6final.controller;
 
+import com.codegym.castudymd6final.model.entity.Notification;
 import com.codegym.castudymd6final.model.entity.ShareWallet;
 import com.codegym.castudymd6final.model.entity.User;
 import com.codegym.castudymd6final.model.entity.Wallet;
+import com.codegym.castudymd6final.service.notification.NotificationService;
 import com.codegym.castudymd6final.service.shareWallet.IShareWalletService;
 import com.codegym.castudymd6final.service.user.UserService;
 import com.codegym.castudymd6final.service.wallet.WalletSV;
@@ -26,6 +28,9 @@ public class ShareWalletController {
 
     @Autowired
     private WalletSV walletSV;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/list/{userId}")
     public ResponseEntity<List<Wallet>> findALlSharedWallet(@PathVariable Long userId) {
@@ -54,6 +59,12 @@ public class ShareWalletController {
                         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                     }
                 }
+                Notification n = new Notification(
+                        wallet.getUser().getUsername() + " đã chia sẻ ví "+ wallet.getName()+ " với bạn",
+                        wallet.getUser(),
+                        user1
+                );
+                notificationService.save(n);
                 shareWalletService.save(shareWallet);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
