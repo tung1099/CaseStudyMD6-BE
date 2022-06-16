@@ -127,6 +127,9 @@ public class WalletController {
         wallet1.setBalance(wallet.getTotal());
         AddMoney addMoney = new AddMoney(wallet1.getTotal(), wallet1.getDate(), wallet1);
         addMoneySV.save(addMoney);
+        if (wallet1.getNote() == null){
+            wallet1.setNote("Không có ghi chú");
+        }
         if (wallet1.getIcon() == null) {
             wallet1.setIcon(new Icon(1L, "https://static.moneylover.me/img/icon/icon.png"));
         }
