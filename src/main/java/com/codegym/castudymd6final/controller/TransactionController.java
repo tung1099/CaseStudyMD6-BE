@@ -33,8 +33,6 @@ public class TransactionController {
     @Autowired
     private ICategorySV categorySv;
 
-    @Autowired
-    private IWalletSV walletSv;
 
 
     @PostMapping("/create/{idUser}")
@@ -153,5 +151,14 @@ public class TransactionController {
     public ResponseEntity<Iterable<Transaction>> getTransactionInTimeByIdWallet (@RequestBody DateDTO date){
         Iterable<Transaction> transactionInTimes = transactionService.getListTransactionInTimeByIdWallet(date.getDate1(), date.getDate2(), date.getWallet().getId());
         return new ResponseEntity<>(transactionInTimes, HttpStatus.OK);
+    }
+
+    @GetMapping("/check/{walletId}/{amount}")
+    public ResponseEntity<Boolean> check(@PathVariable Long walletId, @PathVariable Long amount) {
+        Wallet wallet = walletService.findById(walletId).get();
+        if (amount > wallet.getBalance()) {
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
