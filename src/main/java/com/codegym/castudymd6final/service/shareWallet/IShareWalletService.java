@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface IShareWalletService extends IGeneralService<ShareWallet> {
     List<Long> findListWalletShare(Long id);
+
+    List<Long> findWhoWasShared(Long id);
+
 }

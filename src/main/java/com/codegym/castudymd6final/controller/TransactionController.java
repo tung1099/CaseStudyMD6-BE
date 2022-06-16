@@ -67,19 +67,25 @@ public class TransactionController {
         return new ResponseEntity<>(transactionService.save(transaction), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/deleteTransaction/{id}")
-    public ResponseEntity<Transaction> deleteTransaction(@PathVariable Long id){
-        Optional<Transaction> optionalTransaction =transactionService.findById(id);
+
+    //Xóa transaction của mình, không xóa của người khác
+    @DeleteMapping("/deleteTransaction/{idUser}/{idTransaction}")
+    public ResponseEntity<Transaction> deleteTransaction(@PathVariable Long idUser,
+                                                         @PathVariable Long idTransaction){
+        Optional<Transaction> optionalTransaction = transactionService.findById(idTransaction);
         if (!optionalTransaction.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Transaction transaction = transactionService.findById(id).get();
+        if (optionalTransaction.get().getWallet().getUser().getId() != idUser){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Transaction transaction = transactionService.findById(idTransaction).get();
         Long id1 = transaction.getWallet().getId();
         Wallet wallet =  walletService.findById(id1).get();
         int walletMoney = wallet.getBalance();
         int money = transaction.getAmount();
         wallet.setBalance(walletMoney + money);
-        transactionService.removeById(id);
+        transactionService.removeById(idTransaction);
         return new ResponseEntity<>(optionalTransaction.get(), HttpStatus.NO_CONTENT);
     }
 
@@ -135,6 +141,7 @@ public class TransactionController {
         return new ResponseEntity<>(transactionService.findAll(), HttpStatus.OK);
     }
 
+    //Danh sách lịch sử giao dịch trên tất cả các ví của 1 user
     @GetMapping("/listTransaction/{idUser}")
     public ResponseEntity<List<Transaction>> showAllTransactionByIdUser(@PathVariable Long idUser){
         return new ResponseEntity<>(transactionService.getListTransactionUser(idUser), HttpStatus.OK);

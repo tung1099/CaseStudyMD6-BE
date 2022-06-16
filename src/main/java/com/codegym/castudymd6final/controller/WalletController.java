@@ -6,6 +6,7 @@ import com.codegym.castudymd6final.model.entity.*;
 import com.codegym.castudymd6final.service.addMoney.IAddMoneySV;
 import com.codegym.castudymd6final.service.iconUser.IIconSV;
 import com.codegym.castudymd6final.service.inout.IInOutSV;
+import com.codegym.castudymd6final.service.shareWallet.IShareWalletService;
 import com.codegym.castudymd6final.service.sumMoney.ISumMoneySV;
 import com.codegym.castudymd6final.service.wallet.IWalletSV;
 import org.hibernate.annotations.Parameter;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.codegym.castudymd6final.model.entity.Wallet;
@@ -58,20 +60,23 @@ public class WalletController {
     @Autowired
     private IInOutSV inOutSV;
 
+    @Autowired
+    private IShareWalletService shareWalletService;
+
     @GetMapping("/icon")
     public ResponseEntity<List<Icon>> findAllIcon(){
         List<Icon> icons = iconSV.findAll();
         return new ResponseEntity<>(icons, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Wallet> findWalletById(@PathVariable Long id){
-        Optional<Wallet> walletOptional = walletSV.findById(id);
-        if (!walletOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(walletOptional.get(), HttpStatus.OK);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Wallet> findWalletById(@PathVariable Long id){
+//        Optional<Wallet> walletOptional = walletSV.findById(id);
+//        if (!walletOptional.isPresent()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(walletOptional.get(), HttpStatus.OK);
+//    }
 
     @GetMapping("/moneytype")
     public ResponseEntity<List<MoneyType>> fillAllType(){
@@ -79,19 +84,41 @@ public class WalletController {
         return new ResponseEntity<>(moneyTypes, HttpStatus.OK);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<Wallet>> findAll(){
-        List<Wallet> wallets = walletSV.findAll();
-        return new ResponseEntity<>(wallets, HttpStatus.OK);
-    }
+//    @GetMapping("/list")
+//    public ResponseEntity<List<Wallet>> findAll(){
+//        List<Wallet> wallets = walletSV.findAll();
+//        return new ResponseEntity<>(wallets, HttpStatus.OK);
+//    }
 
+    //Lấy ra tất cả ví của người dùng
     @GetMapping("/getWalletByUserId/{id}")
     public ResponseEntity<List<Wallet>> findAllWalletByUserId(@PathVariable Long id){
         List<Wallet> wallets = walletSV.getWalletByUserId(id);
         return new ResponseEntity<>(wallets, HttpStatus.OK);
     }
 
+    //Lấy ra chi tiết 1 ví của người dùng
+    @GetMapping("/getWallet/{idUser}/{idWallet}")
+    public ResponseEntity<Wallet> findWallet(@PathVariable Long idUser,
+                                             @PathVariable Long idWallet) {
+        boolean check = false;
+        List<Long> list = shareWalletService.findWhoWasShared(idWallet);
+        Wallet wallet = walletSV.findById(idWallet).get();
+        list.add(wallet.getUser().getId());
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) == idUser) {
+                check = true;
+            }
+        }
+        if (!check) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(wallet, HttpStatus.OK);
+        }
+    }
 
+
+    //Người dùng tạo ví
     @PostMapping("/createWallet/{idUser}")
     public ResponseEntity<Wallet> create(@ModelAttribute Wallet wallet, @PathVariable Long idUser) {
         User user = userService.findById(idUser).get();
@@ -106,25 +133,35 @@ public class WalletController {
         return new ResponseEntity<>(walletSV.save(wallet1), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Wallet> deleteWallet(@PathVariable Long id) {
-        Optional<Wallet> walletOptional = walletSV.findById(id);
+
+    //Người dùng xóa ví của chính mình, ko xóa ví người khác.
+    @DeleteMapping("/{idUser}/{idWallet}")
+    public ResponseEntity<Wallet> deleteWallet(@PathVariable Long idWallet,
+                                               @PathVariable Long idUser) {
+        Optional<Wallet> walletOptional = walletSV.findById(idWallet);
         if (!walletOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        walletSV.deleteWallet(id);
-        addMoneySV.removeById(id);
+        if ( walletOptional.get().getUser().getId() != idUser) {
+           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        walletSV.deleteWallet(idWallet);
         return new ResponseEntity<>(walletOptional.get(), HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/editWallet/{id}/{idUser}")
-    public ResponseEntity<Wallet> editWallet(@RequestBody Wallet wallet, @PathVariable Long id, @PathVariable Long idUser){
-        Optional<Wallet> walletOptional = walletSV.findById(id);
+
+    //Người dùng sửa ví của mình
+    @PutMapping("/editWallet/{idWallet}/{idUser}")
+    public ResponseEntity<Wallet> editWallet(@RequestBody Wallet wallet, @PathVariable Long idWallet, @PathVariable Long idUser){
+        Optional<Wallet> walletOptional = walletSV.findById(idWallet);
         if (!walletOptional.isPresent()) {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if ( walletOptional.get().getUser().getId() != idUser) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         User user = userService.findById(idUser).get();
-        Wallet wallet1 = new Wallet(id, wallet.getName(), wallet.getDate(), wallet.getIcon(), wallet.getMoneyType(), wallet.getTotal(), wallet.getBalance(), wallet.getNote(), user);
+        Wallet wallet1 = new Wallet(idWallet, wallet.getName(), wallet.getDate(), wallet.getIcon(), wallet.getMoneyType(), wallet.getTotal(), wallet.getBalance(), wallet.getNote(), user);
         return new ResponseEntity<>(walletSV.save(wallet1), HttpStatus.OK);
     }
 
@@ -151,11 +188,30 @@ public class WalletController {
         return new ResponseEntity<>(inOut, HttpStatus.OK);
     }
 
-    @GetMapping("/addMoney/{idWallet}")
-    public ResponseEntity <List<AddMoney>> getAllAddMoney(@PathVariable Long idWallet) {
+    @GetMapping("/listAddMoney/{idUser}/{idWallet}")
+    public ResponseEntity <List<AddMoney>> getAllAddMoney(@PathVariable Long idWallet,
+                                                          @PathVariable Long idUser) {
+        Wallet wallet = walletSV.findById(idWallet).get();
+        if (wallet.getUser().getId() != idUser) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         List<AddMoney> addMonies = addMoneySV.getAddMoneyByWallet(idWallet);
         return new ResponseEntity<>(addMonies, HttpStatus.OK);
     }
+
+    @GetMapping("/listAddMoneybyUser/{idUser}")
+    public ResponseEntity<Iterable<AddMoney>> getAllAddMoneyByUser(@PathVariable Long idUser) {
+       Iterable<AddMoney> addMonies = addMoneySV.getAllAddMoneyByIdUser(idUser);
+       return new ResponseEntity<>(addMonies, HttpStatus.OK);
+
+    }
+
+
+
+
+
+
+
 
 
 }
